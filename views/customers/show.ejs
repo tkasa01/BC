@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Detail</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<div class="container">
+    <h3><a href="/customers">Customers List</a></h3>
+    <h1>Customer Detail</h1>
+    <table>
+        <tbody>
+        <tr>
+            <td>Name</td>
+            <td>:</td>
+            <td><%= customer.firstname %></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>:</td>
+            <td><%= customer.lastname %></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>:</td>
+            <td><%= customer.address %></td>
+        </tr>
+        </tbody>
+    </table>
+    <h3><a href="/customers/edit/<%= customer._id%>">EDIT</a></h3>
+    <form action="/customers/delete/<%= customer._id%>" method="post">
+        <button type="submit">DELETE</button>
+    </form>
+</div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+</body>
+</html>

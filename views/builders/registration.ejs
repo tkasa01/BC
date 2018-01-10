@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../template/head.ejs %>
+</head>
+<body>
+<header>
+    <% include ../template/header.ejs %>
+</header>
+<div class="container">
+    <h1><%= pageTitle%></h1>
+    <form action="/builders/registration" method="post">
+        <table>
+            <tbody>
+            <tr>
+                <td>Titile</td>
+                <td>
+                    <select name="buildertitle">
+                        <option selected="" value="Default">--</option>
+                        <option value="mr"> Mr</option>
+                        <option value="mrs"> Mrs</option>
+                        <option value="ms"> Ms</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td><input type="text" name="firstname" /></td>
+                <%if(errors && errors.firstname){%> <p><%=errors.firstname%></p> <%}%>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td><input type="text" name="lastname" /></td>
+            </tr>
+            <tr>
+                <td>Position</td>
+                <td><input type="text" name="position" /></td>
+            </tr>
+            <tr>
+                <td>Date of Birth</td>
+                <td><input type="date" name="dob" /></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" name="email" /></td>
+            </tr>
+            <tr>
+                <td>Phone number</td>
+                <td><input type="text" name="phonenumber" /></td>
+            </tr>
+            <tr>
+                <td>Number of cards</td>
+                <td><input type="text" name="ncards" /></td>
+            </tr>
+            <tr>
+                <td>Education</td>
+                <td><input type="text" name="education" /></td>
+            </tr>
+            <tr>
+                <td>Liability Insurance exparied date</td>
+                <td><input type="date" name="insurance"></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><textarea type="text" name="address"></textarea></td>
+            </tr>
+            <tr>
+                <td>Post Code</td>
+                <td><input type="text" name="postcode"></td>
+            </tr>
+
+            <tr>
+                <td>Password</td>
+                <td><input type="password" name="password" /></td>
+            </tr>
+            <tr>
+                <td>Confirm Password</td>
+                <td><input type="password" name="confpassword" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Save</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+</body>
+</html>
+
+

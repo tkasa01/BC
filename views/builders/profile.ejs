@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../template/head.ejs %>
+</head>
+<body>
+<header>
+    <% include ../template/header.ejs %>
+</header>
+   <h1><%= pageTitle %></h1>
+
+   <div class="container">
+       <p><%= builderMessage %></p>
+    <table class="list-table">
+            <tbody>
+            <tr>
+                <td>First name</td>
+                <td>:</td>
+                <td><%= builder.firstname%></td>
+            </tr>
+            <tr>
+                <td>Last name</td>
+                <td>:</td>
+                <td><%= builder.lastname%></td>
+            </tr>
+            <tr>
+                <td>Position</td>
+                <td>:</td>
+                <td><%= builder.position%></td>
+            </tr>
+            </tbody>
+
+
+    </table>
+       <p>Download the images:</p>
+       <div>
+           <label>Profile Image:</label>
+           <input type="file" name="img">
+       </div>
+
+        <button type="submit">DELETE</button>
+</div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+</body>
+</html>

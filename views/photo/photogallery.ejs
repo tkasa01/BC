@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../template/head.ejs %>
+</head>
+<body>
+<header>
+    <% include ../template/header.ejs %>
+</header>
+    <div class="container">
+        <table class="list-table">
+                <tr>
+                    <h1>List type of work: </h1>
+                </tr>
+            <h3><%= title %></h3>
+            <ul>
+                <% for(var i=0; i<categories.length; i++){ %>
+                <li> <a href='<%= categories[i] %>'>
+                        <%= categories[i] %>
+                    </a>
+                </li>
+                <% } %>
+            </ul>
+        </table>
+    </div>
+</body>
+</html>

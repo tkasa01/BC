@@ -1,0 +1,163 @@
+
+body {
+  margin: 0;
+  padding: 0 10px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: #555555;
+}
+h1{
+  display: block;
+  margin-top: 0;
+  text-align: center;
+  font-size: 2em;
+  color: #cb453f;
+  font-weight: normal;
+}
+
+a {
+  color: #777777;
+}
+
+.container {
+  padding: 20px;
+  margin-left: 350px;
+  background-color: #efefef;
+  width: 37%;
+  border-radius: 6px;
+}
+.container h3 a {
+  text-decoration: none;
+  padding: 1px 5px;
+  background-color: #00AE4D;
+  border-radius: 6px;
+  color: #FFFFFF;
+}
+
+.container h3 a:hover, .container table tr td button:hover {
+  background-color: #7777;
+  color: black;
+}
+
+.container table {
+  width: 400px;
+}
+
+.container table tr td {
+  padding: 5px;
+}
+.alert-denger{
+   width: 400px;
+
+;
+}
+.container table tr td input, .container table tr td textarea{
+  border: solid 1px #dddddd;
+  padding: 5px 10px;
+  border-radius: 6px;
+  width: 110%;
+  color: #777777;
+}
+.container table tr td input[type=radio]{
+  border: solid 1px #dddddd;
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  width: 120%;
+  color: #777777;
+}
+.container table tr td button {
+  float: right;
+  border: solid 1px #CB2027;
+  background-color: #e2c7b3;
+  border-radius: 6px;
+  text-transform: uppercase;
+  color: #CB2027;
+  margin: 10px 0;
+  padding: 10px 20px;
+}
+
+.container form button {
+  border: solid 1px #CB2027;
+  background-color: #DD4B39;
+  border-radius: 6px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 1px 0;
+  padding: 1px 2px;
+}
+
+.container .list-table {
+  /*width: 360px;*/
+  border: solid 2px #DDDDDD;
+  border-spacing: 0;
+}
+
+.container .list-table th {
+  border-bottom: solid 2px #DDDDDD;
+}
+
+/*image for logo in header.ejs*/
+img{
+  width: 100px;
+  height: 80px;
+  margin: 0 1px;
+  position: relative;
+  text-align: left;
+  float: left;
+}
+
+/*-------------------------*/
+
+
+ul{
+  list-style-type: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+.navbar li {
+  display: inline-block;
+  padding: 0;
+}
+
+/*registration pages
+ */
+ li a {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 2.25em 2em;
+  text-decoration: none;
+  background-color: #d1d1d1;
+}
+
+/* pink after navigation*/
+.navbar li a:hover{
+  background-color: #e2c7b3;
+}
+
+/*dropdown in navigation bar from homepage for registration======
+*/
+.dropdown-content a {
+  color: black;
+  padding: 10px 11px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+li.dropdown {
+  display: inline-block;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #CCCCCC;
+  min-width: 192px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  z-index: 1;
+}

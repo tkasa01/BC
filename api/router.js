@@ -1,0 +1,16 @@
+var router = require('express').Router();
+
+var index = require('../routes/index');
+var customers = require('../routes/customers');
+var builders = require('../routes/builders');
+
+router.use('/', index);
+router.use('/customers', customers);
+router.use('/builders',builders);
+router.use('/registration', require('../routes/builders'));
+router.use('/login', require('../routes/login'));
+router.use('/profile', require('../routes/login'));
+router.use('/photogallery',require('../routes/images'));
+//router.use('/posts', require('../routes/posts'));
+//router.use(require('../config/passport'));
+module.exports = router;

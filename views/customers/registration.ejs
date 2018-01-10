@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../template/head.ejs %>
+
+</head>
+<body>
+<header>
+    <% include ../template/header.ejs %>
+</header>
+<div class="container">
+    <h3><a href="/customers">Builders List</a></h3>
+    <h1>Registration page for Customers</h1>
+    <form action="/customers/save" method="post">
+        <table>
+            <tbody>
+            <tr>
+                <td>Titile</td>
+                <td>
+                    <select type="value" name="customertitle">
+                        <option value="--">--</option>
+                        <option value="mr"> Mr</option>
+                        <option value="mrs"> Mrs</option>
+                        <option value="ms"> Ms</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td><input type="text" name="firstname" /></td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td><input type="text" name="lastname" /></td>
+            </tr>
+            <tr>
+                <td>Date of Birth</td>
+                <td><input type="date" name="dob" /></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" name="email" /></td>
+            </tr>
+            <tr>
+                <td>Phone number</td>
+                <td><input type="text" name="phonenumber" /></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><textarea type="text" name="address"></textarea></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" name="password" /></td>
+            </tr>
+            <tr>
+                <td>Confirm Password</td>
+                <td><input type="password" name="confpassword" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Save</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+  </div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+ </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../template/head.ejs %>
+</head>
+<body>
+<header>
+    <% include ../template/header.ejs %>
+</header>
+<div class="container">
+    <h1><%= pageTitle %></h1>
+        <h2>Builders Detail</h2>
+    <table>
+        <% if(builders.length>0) { %>
+            <table class="list-table">
+                <thead>
+                    <tr>
+                        <th>Builder Name</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <% for(var i=0; i<builders.length; i++) { %>
+                        <tr>
+                            <td><a href="/builders/profile/<%= builders[i]._id%>"><%= builders[i].firstname%> <%= builders[i].lastname%></a></td>
+
+                            <td><%= builders[i].position%></td>
+                        </tr>
+                <% } %>
+             </table>
+            <% } else { %>
+            <div>No employees found.</div>
+            <% } %>
+
+    </div>
+
+    <footer>
+        <% include ../template/footer.ejs %>
+    </footer>
+
+</body>
+</html>

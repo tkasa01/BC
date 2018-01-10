@@ -1,0 +1,47 @@
+<!-- views/template/header.ejs -->
+
+<nav class="navbar" role="navigation">
+    <% include ./messages.ejs %>
+            <div class="menu">
+                <span class="menu"></span>
+                <ul>
+                        <a class="logo" href="/"><img src="http://localhost:3000/images/logo.png" alt="The Building Company- Providing
+                           qualified builders to privite works">
+                        </a>
+                    <li>
+                        <a class="topnav" href="/location" >
+                            Search in location
+                        </a>
+                    </li>
+                    <li>
+                        <a class="topnav" href="/builders/list" >
+                            <span>Builders list</span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Registration page</a>
+                        <div class="dropdown-content">
+                            <a href="/customers/registration">For customers</a>
+                            <a href="/builders/registration">For builders</a>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a class="topnav" href="/login" >
+                            <span>Login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="topnav" href="/photogallery" >
+                            <span>Photo Gallery</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="topnav" href="/customer/logout" >
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+ </nav>
+

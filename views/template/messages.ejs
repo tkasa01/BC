@@ -1,0 +1,15 @@
+<ul class="message">
+    <% if(typeof errors !== 'undefined' && typeof errors.summary !== 'undefined') { %>
+        <p class="error-text" style="color:#f14943"> <%=errors.summary%> </p>
+    <%}%>
+    <% if(typeof message !== 'undefined' && typeof message.summary !== 'undefined') {
+        for(var j = 0; j < message.length; j++) { %>
+            <li>
+                <% if(message[j]) {%>
+                     <p class="info-text" style="color:darkseagreen"><%= message[j] %></p>
+                <%}%>
+            </li>
+        <%}
+    }%>
+</ul>
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Customers</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<div class="container">
+    <h3><a href="/customers">Employee List</a></h3>
+    <h1>Edit Employee</h1>
+    <form action="/customers/update/<%= customer._id%>" method="post">
+        <table>
+            <tbody>
+            <tr>
+                <td>Title</td>
+                <td><input value=" " name="title" value="<%= customer.title %>" /></td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td><input type="text" name="firstname" value="<%= customer.firstname %>" /></td>
+            </tr>
+            <tr>
+                <td>Lasr Name</td>
+                <td><input type="text" name="lastname" value="<%= customer.lastname %>" /></td>
+            </tr>
+            <tr>
+                <td>Position</td>
+                <td><input type="text" name="position" value="<%= customer.position %>" /></td>
+            </tr>
+            <tr>
+                <td>DOB</td>
+                <td><input type="text" name="dob" value="<%= customer.dob %>" /></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" name="email" value="<%= customer.email %>" /></td>
+            </tr>
+            <tr>
+                <td>Phonenumber</td>
+                <td><input type="text" name="phonenumber" value="<%= customer.phonenumber %>" /></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><textarea name="address"><%= customer.address %></textarea></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" name="password" value="<%= customer.password %>" /></td>
+            </tr>
+            <tr>
+                <td>Confpassword</td>
+                <td><input type="password" name="confpassword" value="<%= customer.confpassword %>" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Update</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+</body>
+</html>

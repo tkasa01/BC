@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <% include ./template/head.ejs %>
+</head>
+<body>
+<header>
+    <% include ./template/header.ejs %>
+</header>
+<div class="container">
+    <h1><%= pageTitle %></h1>
+
+    <% include template/messages.ejs %>
+    <form action="/profile" method="post">
+        <table>
+            <% if(locals.messages) { %>
+            <div class="alert alert-denger"><%= messages.msg %></div>
+            <% } %>
+            <tbody>
+            <tr>
+                <td>Email:</td>
+                <td><input type="email" name="email" /></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" name="password" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Login</button></td>
+            </tr>
+            <tr>
+               <td><input type="hidden" name="remember_me" value="" /></td>
+                <td><input name="remember_me" type="checkbox" value="1"/> Keep me logged in on this computer</td>
+              <!-- <em class="note"><strong>Do not</strong> use this option on a public computer</em>-->
+            </tr>
+
+            </tbody>
+        </table>
+    </form>
+</div>
+<footer>
+    <% include template/footer.ejs %>
+</footer>
+</body>
+</html>
