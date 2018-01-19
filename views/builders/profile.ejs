@@ -8,7 +8,6 @@
     <% include ../template/header.ejs %>
 </header>
    <h1><%= pageTitle %></h1>
-
    <div class="container">
        <p><%= builderMessage %></p>
     <table class="list-table">
@@ -28,16 +27,20 @@
                 <td>:</td>
                 <td><%= builder.position%></td>
             </tr>
+            <tr>
+                <td>Education</td>
+                <td>:</td>
+                <td><%= builder.education%></td>
+            </tr>
             </tbody>
-
-
     </table>
        <p>Download the images:</p>
        <div>
            <label>Profile Image:</label>
            <input type="file" name="img">
        </div>
-
+       <h3><a href="/builders/edit/<%= builder._id%>">EDIT</a></h3>
+       <form action="/builders/delete/<%= builder._id%>" method="post"></form>
         <button type="submit">DELETE</button>
 </div>
 <footer>

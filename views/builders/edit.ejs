@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Customers</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<div class="container">
+    <h1><%= pageTitle %></h1>
+    <form action="/builders/update/<%= builder._id%>" method="post">
+        <table>
+            <tbody>
+            <tbody>
+            <tr>
+                <td>Title</td>
+                <td>
+                    <select name="title">
+                        <option selected="" value="<%= builder.title %>">--</option>
+                        <option value="mr"> Mr</option>
+                        <option value="mrs"> Mrs</option>
+                        <option value="ms"> Ms</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td><input type="text" name="firstname" value="<%= builder.firstname %>" /></td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td><input type="text" name="lastname" value="<%= builder.lastname %>" /></td>
+            </tr>
+            <tr>
+                <td>Position</td>
+                <td><input type="text" name="position" value="<%= builder.position %>" /></td>
+            </tr>
+            <tr>
+                <td>Date of Birth</td>
+                <td><input type="date" name="dob" value="<%= builder.dob %>" /></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" name="email" value="<%= builder.email %>" /></td>
+            </tr>
+            <tr>
+                <td>Phone number</td>
+                <td><input type="text" name="phonenumber" value="<%= builder.phonenumber %>" /></td>
+            </tr>
+            <tr>
+                <td>Number of cards</td>
+                <td><input type="text" name="ncards" value="<%= builder.ncards %>" /></td>
+            </tr>
+            <tr>
+                <td>Education</td>
+                <td><input  name="education" value="<%= builder.education %>" /></td>
+            </tr>
+            <tr>
+                <td>Liability Insurance exparied date</td>
+                <td><input type="date" name="insurance" value="<%= builder.insurance %>" /></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><input type="text" name="'address" value="<%= builder.address %>"></td>
+            </tr>
+            <tr>
+                <td>Post Code</td>
+                <td><input type="text" name="postcode" value="<%= builder.postcode %>" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Update</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+</body>
+</html>

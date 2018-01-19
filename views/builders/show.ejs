@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Detail</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<div class="container">
+    <h3><a href="/builders">Builders List</a></h3>
+    <h1>Builder Detail</h1>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>:</td>
+            <td><%= builder.firstname %></td>
+        </tr>
+        <tr>
+            <td>Lastname</td>
+            <td>:</td>
+            <td><%= builder.lastname %></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>:</td>
+            <td><%= builder.address %></td>
+        </tr>
+        <tr>
+            <td>Phone number</td>
+            <td>:</td>
+            <td><%= builder.phonenumber %></td>
+        </tr>
+        </tbody>
+    </table>
+    </form>
+</div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+</body>
+</html>

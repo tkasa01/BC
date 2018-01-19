@@ -10,10 +10,11 @@
 <div class="container">
     <h1><%= pageTitle%></h1>
     <form action="/builders/registration" method="post">
+        <% include ../template/errors.ejs %>
         <table>
             <tbody>
             <tr>
-                <td>Titile</td>
+                <td>Title</td>
                 <td>
                     <select name="buildertitle">
                         <option selected="" value="Default">--</option>
@@ -26,7 +27,6 @@
             <tr>
                 <td>First Name</td>
                 <td><input type="text" name="firstname" /></td>
-                <%if(errors && errors.firstname){%> <p><%=errors.firstname%></p> <%}%>
             </tr>
             <tr>
                 <td>Last Name</td>

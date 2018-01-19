@@ -10,8 +10,7 @@
 <div class="container">
     <h1><%= pageTitle %></h1>
         <h2>Builders Detail</h2>
-    <table>
-        <% if(builders.length>0) { %>
+        <% if(builders.length > 0) { %>
             <table class="list-table">
                 <thead>
                     <tr>
@@ -26,13 +25,11 @@
                             <td><%= builders[i].position%></td>
                         </tr>
                 <% } %>
-             </table>
+            </table>
             <% } else { %>
             <div>No employees found.</div>
             <% } %>
-
     </div>
-
     <footer>
         <% include ../template/footer.ejs %>
     </footer>
