@@ -13,11 +13,10 @@ var BuilderSchema = new mongoose.Schema({
     phonenumber: {type: String, required: true, length: 11},
     ncards:{type: String},
     education: {title: String},
-    insurance: {type: Date, require: true},
+    insurance: {type: String, require: true},
     address: {type: String, require: true},
     postcode:{type: String, require: true},
     password: {type: String, require: true},
-    confpassword: {type: String, require: true},
     updated: {
         type: Date,
         default: Date.now
@@ -31,6 +30,7 @@ BuilderSchema.pre('save', function (next) {
     next();
 });
 
+/*this middleware pre check if the builder already exist*/
 BuilderSchema.pre('save', function (next) {
     var self = this;
     Builder.find({email : self.email}, function (err, docs) {
@@ -56,36 +56,8 @@ BuilderSchema.methods = {
         }
     }
 };
-/*
-//generating a hash
-BuilderSchema.methods.generateHash = function (password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
-//checking if password is valid
-BuilderSchema.methods.validPassword = function (password) {
-    return bcrypt.compareSync(password, this.local.password);
-};
 
-BuilderSchema.plugin(uniqueValidator);
-*/
-var Builder = module.exports = mongoose.model('Builder', BuilderSchema);
+//BuilderSchema.plugin(uniqueValidator);
 
-/*
-var Builder = mongoose.model;
+var Builder =  module.exports = mongoose.model('Builder', BuilderSchema);
 
-
-
-
-
-BuilderSchema.pre('save', function (next) {
-    var self = this;
-    Builder.find({email : self.email}, function (err, docs) {
-        if (!docs.length){
-            next();
-        }else{
-            console.log('user exists: ', self.email);
-            next(new Error("User exists!"));
-        }
-    });
-}) ;
- */
