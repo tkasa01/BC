@@ -40,8 +40,9 @@
            <input type="file" name="img">
        </div>
        <h3><a href="/builders/edit/<%= builder._id%>">EDIT</a></h3>
-       <form action="/builders/delete/<%= builder._id%>" method="post"></form>
+       <form action="/builders/delete/<%= builder._id%>" method="post">
         <button type="submit">DELETE</button>
+       </form>
 </div>
 <footer>
     <% include ../template/footer.ejs %>
