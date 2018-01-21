@@ -2,7 +2,6 @@
  * Created by tkasa on 19/12/2017.
  */
 var mongoose = require('mongoose');
-var flash = require('connect-flash');
 var Builder = require('../models/Builder');
 var shortid = require('shortid');
 var validation = require('./validation');
@@ -20,19 +19,13 @@ builderController.list = function(req, res) {
         }
     });
 };
-function getBuilder(builder) {
-    return '${builder}'
-}
 
 builderController.findByName = function(req, res){
-    var query = Builder.find({id: req.params.id});
-    console.log(req.body.firstname);
-    console.log(req.body.lastname);
-     Builder.$where('firstname').exec(function (err, builder) {
+     Builder.find({'firstname': req.body.firstname} && {'lastname':req.body.lastname}).exec(function (err, builder ) {
         if(err || !builder){
             res.send('non found');
         }else{
-            res.render('../views/builders/show',{builder: builder});
+            res.render('../views/builders/show',{builder:builder});
         }
     });
 };
@@ -62,17 +55,21 @@ builderController.showRegistrationPage = function(req,res){
     global.errors = '';
 };
 
+
 builderController.save = function(req, res) {
     validation.builder(req.body).then(function(validatedUser){
         var builder = new Builder(validatedUser);
-        builder.save(function (err){
+        builder.save(function (err, builder){
             if(err){
-                res.json("/",{ messages: global.messages});
-               // res.redirect("/",{ messages: global.messages});
+               console.log(err);
+                res.json(err);
+            }else{
+                console.log(builder);
+                res.redirect("/login");
             }
         });
     },function(err){
-      errors = err;
+        errors = err;
         res.redirect("/builders/registration");
 
     });
@@ -112,6 +109,7 @@ builderController.update = function(req, res){
         { new: true },
       function (err, builder) {
            if (err) {
+               next(err);
                console.log(err);
                res.render("../views/builders/edit", {builder: req.body});
            }
@@ -123,17 +121,16 @@ builderController.update = function(req, res){
 
  //delete
  builderController.delete = function(req, res) {
- Builder.remove({_id: req.params.id}, function(err) {
- if(err) {
- console.log(err);
- }
- else {
- console.log("Builder deleted!");
- res.redirect("/builders");
- }
- });
+     Builder.remove({_id: req.params.id}, function(err) {
+         if(err) {
+            console.log(err);
+         }
+         else {
+             console.log("Builder deleted!");
+             res.redirect("/");
+         }
+     });
  };
-
 
 
  module.exports = builderController;
