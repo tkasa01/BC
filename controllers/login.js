@@ -47,7 +47,7 @@ builderController.checkUser = function(req, res, next){
         return;
     }
         Builder.findOne({email: email}).then(function (user) {
-            concole.log(email);
+            console.log(email);
             if(!user){
                 res.status(401).send('No user exist');
             }else{
