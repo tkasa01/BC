@@ -11,10 +11,13 @@
     <h1><%= pageTitle %></h1>
 
     <% include template/messages.ejs %>
-    <form action="/profile" method="post">
+    <form action="/login" method="post">
         <table>
             <% if(locals.messages) { %>
-            <div class="alert alert-denger"><%= messages.msg %></div>
+            <div class="alert alert"><%= messages.msg %></div>
+            <% } %>
+            <% if(locals.errors) { %>
+            <div class="alert alert-denger"><%= errors.msg %></div>
             <% } %>
             <tbody>
             <tr>
