@@ -12,7 +12,9 @@ var customerController = {};
             req.flash("error","All list iz not shown");
             console.log("error", err);
         } else {
-            res.render('../views/customers/index', {customers: customers});
+            res.render('../views/customers/index', {
+                pageTitle: 'List of customers',
+                customers: customers});
         }
     });
 };
@@ -24,13 +26,17 @@ var customerController = {};
             console.log("error: ", err);
         }
         else{
-            res.render('../views/customers/show', {customer: customer});
+            res.render('../views/customers/show', {
+                pageTitle: 'Customer\'s a home page',
+                customer: customer});
         }
     });
 };
 
 customerController.create = function (req, res) {
-   res.render('../views/customers/registration');
+   res.render('../views/customers/registration',{
+       pageTitle: 'Registration Page for Customers'
+   });
 };
 
 //save new customer
@@ -39,7 +45,7 @@ customerController.save = function(req, res) {
     customer.save(function(err) {
         if(err) {
             console.log(err);
-            res.render("../views/customers/registration");
+            res.render("../views/customers/registration",{pageTitle: 'Registration Page for Customers'});
         } else {
             console.log("Successfully created a customer.");
             res.redirect("/customers/show/"+ customer._id);
@@ -52,6 +58,7 @@ customerController.save = function(req, res) {
 customerController.edit = function(req, res) {
     Customer.findOne({_id: req.params.id}).exec(function (err, customer) {
         if (err) {
+            res.send(err);
             console.log("Error:", err);
         }
         else {
@@ -61,18 +68,18 @@ customerController.edit = function(req, res) {
 };
 
 //update
+/*the strings updated not right! should I do validation?*/
+
  customerController.update = function(req, res) {
-    Customer.findByIdAndUpdate(req.params.id, { $set: { customertitle: req.body.customertitle,
-                                                            firstname: req.body.firstname,
-                                                             lastname: req.body.lastname,
-                                                             position: req.body.position,
-                                                                  dob: req.body.dob,
-                                                                email: req.body.email,
-                                                          phonenumber: req.body.phonenumber,
-                                                              address: req.body.address,
-                                                             password: req.body.password,
-                                                         confpassword: req.body.password}},
-                                                   { new: true }, function (err, customer) {
+    Customer.findByIdAndUpdate(req.params.id, { $set: {
+        title: req.body.title,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        dob: req.body.dob,
+        email: req.body.email,
+        phonenumber: req.body.phonenumber,
+        address: req.body.address}},
+        { new: true }, function (err, customer) {
         if (err) {
             console.log(err);
             res.render("../views/customers/edit", {customer: req.body});
