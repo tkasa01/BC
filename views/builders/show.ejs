@@ -8,27 +8,35 @@
 <div class="container">
     <h3><a href="/builders">Builders List</a></h3>
     <h1>Builder Detail</h1>
-    <table>
+    <table class="list-table">
+        <% for(let i =0; i< builder.length; i++) { %>
         <tr>
             <td>Name</td>
             <td>:</td>
-            <td><%= builder.firstname %></td>
+            <td><%= builder[i].firstname %></td>
         </tr>
         <tr>
             <td>Lastname</td>
             <td>:</td>
-            <td><%= builder.lastname %></td>
+            <td><%= builder[i].lastname %></td>
         </tr>
         <tr>
-            <td>Address</td>
+            <td>Possition</td>
             <td>:</td>
-            <td><%= builder.address %></td>
+            <td><%= builder[i].position %></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>:</td>
+            <td><%= builder[i].email %></td>
         </tr>
         <tr>
             <td>Phone number</td>
             <td>:</td>
-            <td><%= builder.phonenumber %></td>
+            <td><%= builder[i].phonenumber %></td>
+            <hr>
         </tr>
+        <% } %>
         </tbody>
     </table>
     </form>
