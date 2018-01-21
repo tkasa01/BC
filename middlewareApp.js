@@ -8,4 +8,13 @@ module.exports = function (app) {
     app.use(bodyParser.json());
     app.use(cookieParser());
 
+    //for jwt token
+    app.use(function(req,res,next){
+        if(true){
+            //req.user = decode
+        }else{
+            req.user = null;
+        }
+        next();
+    })
 };
