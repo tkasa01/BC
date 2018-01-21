@@ -4,21 +4,21 @@
     <% include ../template/head.ejs %>
 </head>
 <body>
-
 <div class="container">
-    <h3><a href="/customers/create">Create Customer</a></h3>
-
-
-    <table class="list-table">
+    <h2>Recent posts from customers</h2>
+    <table class="list-post">
         <thead>
         <tr>
             <th>Customer Name</th>
-            <th>Position</th>
         </tr>
+            <form action="/posts" metod="POST">
+                <input type="text" name=title"/><br />
+                <button type="submit">Submit</button>
+            </form>
         </thead>
         <tbody>
+    </table>
 
-
-
+</div>
 </body>
 </html>
