@@ -1,9 +1,10 @@
-var jwt = require('jsonwebtoken');
-//var expressJwt = require('express-jwt');
 var Builder = require('../models/Builder');
+var Customer = require('../models/Customer');
 var validation = require('./validation');
-//var checkToken = expressJwt({secret: config.secrets.jwt});
+var autho = require('../autho');
 var builderController = {};
+var bcrypt = require('bcrypt-nodejs');
+var store = require('store');
 
 builderController.getEmail = function(req, res){
     console.log(req.email);
@@ -14,9 +15,36 @@ builderController.getEmail = function(req, res){
         })
     }
     res.send({
-        errors: true,
-        message: req.flash('not authorized')
+        errors:  ('not authorized')
     })
+};
+
+exports.login = function(req,res,next){
+    Builder.findOne({'email' : req.body.email},function(err,builder){
+        if(builder){
+            if(bcrypt.compareSync(req.body.password, builder.password)){
+                //login successful
+                var token = autho.signToken(builder);
+                store.set('jwt',token);
+                res.redirect('/');
+            }else{
+                console.log('incorrect passport');
+            }
+        }else{
+            Customer.findOne({'email' : req.body.email},function (err,customer){
+                if(customer){
+                    console.log(customer);
+                }else{
+                    console.log('user not found, sorry');
+                }
+            })
+        }
+    });
+};
+
+exports.logout = function(req,res,next){
+    store.remove('jwt');
+    res.redirect('/');
 };
 
 exports.decodeToken = function(){
@@ -39,42 +67,6 @@ exports.getFreshUser = function () {
 };
 
 
-builderController.checkUser = function(req, res, next){
-   var email = req.body.email;
-   var password = req.body.password;
-    if(!email || !password) {
-        res.status(400).send('You need a username and a password');
-        return;
-    }
-        Builder.findOne({email: email}).then(function (user) {
-            console.log(email);
-            if(!user){
-                res.status(401).send('No user exist');
-            }else{
-                if(!user.authenticate(password)){
-                    res.status(401).send('Wrong password');
-                }else{
-                   req.user = user;
-                   next();
-                }
-            }
-        },function (err) {
-           next(err);
-        });
-    //}
+exports.builder = function(email){
 
 };
-
-
-module.exports = builderController;
-
-/*
- var builder = ({
- firstname: 'lalala',
- lastname: 'mamamam'
- });
- return res.render('../views/builders/profile',{builder: builder,
- pageTitle: 'Registration paje for builders',
- builderMessage: 'I am a qualified builder with experience'
- });
- */
