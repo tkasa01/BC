@@ -4,39 +4,36 @@
     <% include ../template/head.ejs %>
 </head>
 <body>
-<header>
-    <% include ../template/header.ejs %>
-</header>
-<div class="container">
-
-    <h3><a href="/customers/registration">Create Customer</a></h3>
-
-        <% if(customers.length>0) { %>
-    <table class="list-table">
-        <thead>
-        <tr>
-            <th>Customer Name</th>
-            <th>Position</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        <% for(var i=0; i<customers.length; i++) { %>
-        <tr>
-            <td><a href="/customers/show/<%= customers[i]._id%>"><%= customers[i].firstname%> <%= customers[i].lastname%></a></td>
-
-            <td><%= customers[i].position%></td>
-        </tr>
-        <% } %>
-        </tbody>
-
-    </table>
-    <% } else { %>
-    <div>No employees found.</div>
-    <% } %>
-</div>
-<footer>
-    <% include ../template/footer.ejs %>
-</footer>
+    <header>
+        <% include ../template/header.ejs %>
+    </header>
+        <div class="container">
+            <h3><a href="/customers/registration">Create Customer</a></h3>
+                <% if(customers.length>0) { %>
+            <table class="list-table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% for(var i=0; i<customers.length; i++) { %>
+                    <tr>
+                        <td><a href="/customers/show/<%= customers[i]._id%>">
+                                <%= customers[i].firstname%>
+                                <%= customers[i].lastname%></a></td>
+                        <td><%= customers[i].position%></td>
+                    </tr>
+                <% } %>
+                </tbody>
+            </table>
+                <% } else { %>
+                <div>No employees found.</div>
+                <% } %>
+        </div>
+    <footer>
+        <% include ../template/footer.ejs %>
+    </footer>
 </body>
 </html>
