@@ -15,7 +15,9 @@ builderController.list = function(req, res) {
         } else {
             res.render('../views/builders/list', {
                 pageTitle: 'List of Builders' ,
-                builders: builders});
+                builders: builders,
+                user: req.user
+            });
         }
     });
 };
@@ -25,31 +27,43 @@ builderController.findByName = function(req, res){
         if(err || !builder){
             res.send('non found');
         }else{
-            res.render('../views/builders/show',{builder:builder});
+            res.render('../views/builders/show',{
+                builder:builder,
+                user: req.user
+            });
         }
     });
 };
 
 //shows single
-builderController.show = function(req, res){Builder.findOne({_id: req.params.id}).exec(function(err, builder){
-    if(err){
-        console.log(err);
-        res.render('../views/index',{pageTitle: 'Home page'});
-    }
-    else{
-        console.log(builder);
-        var builderMessage = 'I am a qualified builder with experience';
-        res.render('../views/builders/profile', {
-            builderMessage: builderMessage,
-            pageTitle: 'Builder\'s a home page',
-            builder: builder});
-    }
+builderController.show = function(req, res){
+    Builder.findOne({_id: req.params.id}).exec(function(err, builder){
+        if(err){
+            console.log(err);
+            res.render('../views/index',{
+                pageTitle: 'Home page',
+                user: req.user
+
+            });
+        }
+        else{
+            console.log(builder);
+            var builderMessage = 'I am a qualified builder with experience';
+            res.render('../views/builders/profile', {
+                builderMessage: builderMessage,
+                pageTitle: 'Builder\'s a home page',
+                user: req.user,
+                builder: builder,
+                reviews: null //
+                 });
+        }
 });
 };
 
 builderController.showRegistrationPage = function(req,res){
     res.render('builders/registration', {
         pageTitle: 'Registration Page for builders',
+        user: req.user,
         errors: global.errors
     });
     global.errors = '';
@@ -83,7 +97,10 @@ builderController.edit = function(req, res) {
             console.log("Error:", err);
         }
         else {
-            res.render("../views/builders/edit", {builder: builder, pageTitle:'Builder edit page'});
+            res.render("../views/builders/edit", {
+                builder: builder,
+                user: req.user,
+                pageTitle:'Builder edit page'});
         }
     });
 };
@@ -111,10 +128,10 @@ builderController.update = function(req, res){
            if (err) {
                next(err);
                console.log(err);
-               res.render("../views/builders/edit", {builder: req.body});
+               res.render("../views/builders/edit", {builder: req.body,  user: req.user});
            }
-             //  var updateBuilder = _.assign(builder, update);
-               res.redirect('/builders/show/'+builder._id);
+
+               res.redirect('/builders/show/'+builder._id, { user: req.user});
       });
  };
 
