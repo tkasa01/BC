@@ -1,7 +1,7 @@
 var Builder = require('../models/Builder');
 var Customer = require('../models/Customer');
 var validation = require('./validation');
-var autho = require('../autho');
+var auth = require('../auth');
 var builderController = {};
 var bcrypt = require('bcrypt-nodejs');
 var store = require('store');
@@ -23,21 +23,24 @@ exports.login = function(req,res,next){
     Builder.findOne({'email' : req.body.email},function(err,builder){
         if(builder){
             if(bcrypt.compareSync(req.body.password, builder.password)){
-                //login successful
-                var token = autho.signToken(builder);
+                var token = auth.signToken(builder);//login successful
                 store.set('jwt',token);
                 res.redirect('/');
             }else{
                 console.log('incorrect passport');
             }
         }else{
-            Customer.findOne({'email' : req.body.email},function (err,customer){
-                if(customer){
+    Customer.findOne({'email' : req.body.email},function (err,customer){
+         if(customer){
+             if(bcrypt.compareSync(req.body.password, customer.password))
+                 var token = auth.signToken(customer);
+                 store.set('jwt', token);
+                 res.redirect('/');
                     console.log(customer);
-                }else{
-                    console.log('user not found, sorry');
-                }
-            })
+         }else{
+                console.log('user not found, sorry');
+         }
+    })
         }
     });
 };
