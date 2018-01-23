@@ -3,21 +3,25 @@
  */
 var mongoose = require('mongoose');
 var Customer = require('../models/Customer');
+var validation = require('./validation');
 var customerController = {};
 
 //all list of customers
  customerController.list = function(req, res) {
     Customer.find({}).exec(function (err, customers) {
         if (err) {
-            req.flash("error","All list iz not shown");
+            res.send(err);
             console.log("error", err);
         } else {
             res.render('../views/customers/index', {
                 pageTitle: 'List of customers',
-                customers: customers});
+                customers: customers,
+                user: req.user
+            });
         }
     });
 };
+
 
 //shows single
  customerController.show = function(req, res){
@@ -28,30 +32,44 @@ var customerController = {};
         else{
             res.render('../views/customers/show', {
                 pageTitle: 'Customer\'s a home page',
-                customer: customer});
+                customer: customer,
+                user: req.user
+            });
         }
     });
 };
 
 customerController.create = function (req, res) {
    res.render('../views/customers/registration',{
-       pageTitle: 'Registration Page for Customers'
+       pageTitle: 'Registration Page for Customers',
+       user: req.user,
+       errors: global.errors
    });
+   global.errors = '';
+
 };
 
 //save new customer
 customerController.save = function(req, res) {
-    var customer = new Customer(req.body);
-    customer.save(function(err) {
-        if(err) {
-            console.log(err);
-            res.render("../views/customers/registration",{pageTitle: 'Registration Page for Customers'});
-        } else {
-            console.log("Successfully created a customer.");
-            res.redirect("/customers/show/"+ customer._id);
-        }
+    validation.customer(req.body).then(function(validatedUser) {
+        var customer = new Customer(validatedUser);
+        customer.save(function (err, customer) {
+            if (err) {
+                console.log(err);
+                res.render("../views/customers/registration", {
+                    pageTitle: 'Registration Page for Customers',
+                    user: req.user
+                });
+            } else {
+                console.log("Successfully created a customer.");
+                res.redirect('/login');
+            }
+        });
+    },function(err){
+        errors = err;
+        res.redirect("/customer/registration");
     });
-
+    global.errors = '';
 };
 
 //add by id function
@@ -62,7 +80,7 @@ customerController.edit = function(req, res) {
             console.log("Error:", err);
         }
         else {
-            res.render("../views/customers/edit", {customer: customer});
+            res.render("../views/customers/edit", {customer: customer,  user: req.user});
         }
     });
 };
@@ -82,7 +100,7 @@ customerController.edit = function(req, res) {
         { new: true }, function (err, customer) {
         if (err) {
             console.log(err);
-            res.render("../views/customers/edit", {customer: req.body});
+            res.render("../views/customers/edit", {customer: req.body,  user: req.user});
         }
         res.redirect("/customers/show/"+customer._id);
     });
