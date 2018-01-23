@@ -3,9 +3,7 @@
  */
 var express = require('express');
 var router = express.Router();
-var builders = require('../controllers/login');
-var passport = require('passport');
-//var Builder = require('../models/Builder');
+var login = require('../controllers/login');
 
 router.use(function (req,res,next) {
     if(req.session && typeof req.session.user !== 'undefined')
@@ -15,29 +13,23 @@ router.use(function (req,res,next) {
 
 //login
 router.get('/', function(req, res ){
+    console.log(req.user);
     res.render('login', {
         builder: req.builder,
+        user: req.user,
         pageTitle: 'Login page',
         errors: {},
         message: ''});
 });
 
-function isLoggedIn(req, res, next) {
-    if(req.Authenticated())
-        return next();
-    res.redirect('/');
-}
 
-router.post('/',builders.checkUser);
-
-router.get('/profile/:id', isLoggedIn, function(req, res){
+router.get('/profile/:id', function(req, res){
     res.render('profile',{user: req.user});
 });
 
-router.get('/logout',function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
+router.post('/',login.login);
+router.get('/logout',login.logout);
+
 
 
 
