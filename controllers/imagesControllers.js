@@ -13,7 +13,7 @@ imagesController.save = function(req, res) {
         if (err) {
             res.send(err);
         } else {
-            res.render('./photo/photogallery');
+            res.render('./photo/photogallery',{user:req.user});
         }
     });
 };
