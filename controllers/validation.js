@@ -5,10 +5,12 @@ var cryptPassword = require('password-hash-and-salt');
 var async = require('async');
 var Promise = require('promise'); // fulfill, reject
 var locale = require('locale');
+var Builder = require('../models/Builder');
+var Customer = require('../models/Customer');
 
 var errors;
 var messages;
-var validatadForm = {};
+//var validatadForm = {};
 const MIN_AGE = 18;
 const NAME_LENGTH = {min: 2, max: 15};
 const PHONE_LENGTH = 10;
@@ -19,6 +21,23 @@ exports.builder = function(form){
         var age = findAge(form.dob);
             errors   = [];
             messages = [];
+
+        //check email availability
+        let checkEmail = new Promise(function(fulfill,reject){
+            if(form && form.email && validator.isEmail(form.email)){
+                Builder.findOne({'email' : form.email},function(err,builder){
+                    if(builder){
+                        errors.push('The email address is not available');
+                        fulfill();
+                    }else{
+                        fulfill();
+                    }
+                })
+            }else{
+                errors.push('The email format is incorrect');
+                fulfill();
+            }
+        });
 
         if(validator.isEmpty(form.title)){
             errors.push('Your title is empty');
@@ -70,21 +89,40 @@ exports.builder = function(form){
             errors.push('The password does not match with the confirmation password');
         }
 
+        checkEmail.then(function(result){
+            if(errors.length > 0){
+                reject(errors);
+            }else{
+                messages.push('Success, please login');
+                fulfill(form);
+            }
+        });
 
-        if(errors.length > 0){
-            reject(errors);
-        }else{
-            messages.push('Success, please login');
-            fulfill(form);
-        }
-
-    })
+    });
 };
-/*
+
 exports.customer = function(body){
     return new Promise(function(fulfill,reject){
         errors   = [];
         messages = [];
+        let checkEmail = new Promise(function(fulfill,reject){
+            if(form && form.email && validator.isEmail(form.email)){
+                Customer.findOne({'email' : form.email},function(err,builder){
+                    if(builder){
+                        errors.push('The email address is not available');
+                        fulfill();
+                    }else{
+                        fulfill();
+                    }
+                })
+            }else{
+                errors.push('The email format is incorrect');
+                fulfill();
+            }
+        });
+        if(validator.isEmpty(form.title)){
+            errors.push('Your title is empty');
+        }
         if(form.firstname.length > NAME_LENGTH.max || form.firstname.length < NAME_LENGTH.min){
             errors.push('The First name must be between 2 and 15 characters');
         }
@@ -113,7 +151,7 @@ exports.customer = function(body){
          errors.postcode = 'Check the Post Code please';
          }
          */
-/*
+
         if(form.password.length <= PASSWORD_LENGTH ){
             errors.push('The password is too short');
         }
@@ -121,17 +159,17 @@ exports.customer = function(body){
             errors.push('The password does not match with the confirmation password');
         }
 
-
-        if(errors.length > 0){
-            reject(errors);
-        }else{
-            messages.push('Success, please login');
-            fulfill(form);
-        }
-
-    })
+        checkEmail.then(function(result) {
+            if (errors.length > 0) {
+                reject(errors);
+            } else {
+                messages.push('Success, please login');
+                fulfill(form);
+            }
+        })
+    });
 };
-*/
+
 function findAge(data){
     var dayToday = moment().format("YYYY");
     var dateOfBirth = moment(data).format("YYYY");
@@ -139,26 +177,6 @@ function findAge(data){
 }
 
 
-
-/*
-
- cryptPassword(form.password).hash(function (err, hashed_password) {
- if(err) reject(err);
- fulfill(hashed_password)
- });
- }else {
- reject('The password must be minimum 8 long');
- }
- }else{
- reject('The password does not match with confirmation password');
- }
-
- });
- };
-
- */
-
-/*
 
 /*
 * fulfilled - The action relating to the promise succeeded
@@ -187,104 +205,4 @@ function findAge(data){
  }%>
  </ul>
 * */
-
-/*
-})
-};
-exports.customer = function(body){
-    return new Promise(function(fulfill,reject){
-        fulfill(body);
-    })
-};
-
-function firstnameValidation(form) {
-    if(!validator.isAlpha(form.replace(' ', ''))){
-        errors.firstname = 'Please enter a valid first name';
-        isValid = false;
-    }
-    if(form.length > NAME_LENGTH.max || form.length < NAME_LENGTH.min){
-        errors.firstname = 'The first name must be between 2 and 15 characters';
-        isValid = false;
-    }
-}
-
-function lastnameValidation(form) {
-    if (!validator.isAlpha(form.replace(' ', ''))) {
-        errors.lastname = 'Please enter a valid last name';
-        isValid = false;
-    }
-    if (form.length > NAME_LENGTH.max || form.length < NAME_LENGTH.min) {
-        errors.lastname = 'The last name must be between 2 and 15 characters';
-        isValid = false;
-    }
-}
-
-function positionValidation(form) {
-    if(validator.isEmpty(form)){
-        errors.position = 'Your position must be declared';
-        isValid = false;
-    }
-}
-
-function  emailValidation(form) {
-    console.log(form);
-    if(validator.isEmpty(form) && !validator.isEmail(form)){
-        errors.email = 'Check the email please';
-        isValid = false;
-    }
-}
-
-function  phonelValidation(form) {
-    console.log(form);
-    if(!validator.isInt(form)){
-        errors.phonenumber = 'Enter all numbers please';
-        isValid = false;
-    }
-    if(form.length < PHONE_LENGTH){
-        errors.phonenumber = 'Enter please UK phone number';
-        isValid = false;
-    }
-}
-function postcodeValidation(form) {
-    console.log(form);
-    if(!validator.isPostalCode(form.postcode, 'UK')){
-        errors.postcode = 'Check the Post Code please';
-        isValid = false;
-    }
-}
-function passwordValidation(form){
-    console.log(form);
-    if(validator.matches(form.password, form.confpassword)){
-        if(form.password.length < PASSWORD_LENGTH){
-            errors.password = 'The password should be longer eight digits';
-            isValid = false;
-        }else{
-            errors = 'The password does not match the confirmation password';
-            isValid = false;
-        }
-    }
-}
-
- function dobValidation(form) {
- var d = moment.dayOfYear(form);
- console.log(d);
- if((moment(moment(form).format('YYYY'),'YYYY').fromNow() < MIN_AGE).ismin) {
- console.log( moment(moment(form).format('YYYY'), 'YYYY').fromNow());
- errors.dob = 'You are too yang';
- isValid = false;
- }
- }
-
-
-
- function  insuranceValidation(form) {
- if(moment(moment(form).format('YYYY'),'YYYY').fromNow()){
- errors.insurance = 'Enter please a valid insurance card';
- isValid = false;
- }
- }
- */
-
-
-
 
