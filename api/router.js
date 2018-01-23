@@ -7,8 +7,6 @@ var builders = require('../routes/builders');
 router.use('/', index);
 router.use('/customers', customers);
 router.use('/builders',builders);
-router.use('/registration', require('../routes/builders'));
-router.use('/registration', require('../routes/customers'));
 router.use('/login', require('../routes/login'));
 router.use('/photogallery',require('../routes/images'));
 router.use('/posts', require('../routes/posts'));
