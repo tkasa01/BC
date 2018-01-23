@@ -4,18 +4,6 @@
 var express = require('express');
 var router = express.Router();
 var builders = require('../controllers/buildersControllers');
-//var passport = require('passport');
-
-/*it is a middleware function that gives the value of that id, it is a forth argument */
-exports.function = router.param('id', function(req, res, next,id){
-    var g = _.find(builders, {id:id});
-    if(g){
-        req.g = g;
-        next();
-    }else{
-        res.send();
-    }
-});
 
 router.get('/list', builders.list);
 
