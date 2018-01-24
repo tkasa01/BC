@@ -13,7 +13,7 @@ exports.decodeToken = function(){
         if(req.query && req.query.hasOwnProperty('access_token')){
             req.headers.authorization = 'Bearer ' + req.query.access_token;
         }
-        checkToken(req, res, next);
+        checkAuth(req, res, next);
     }
 };
 
