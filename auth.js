@@ -7,7 +7,7 @@ var config = require('./config/config');
 
 //var ExtractJwt = passportJWT.ExtractJwt;
 //var JwtStrategy = passportJWT.Strategy;
-
+/*
 exports.decodeToken = function(){
     return function (req, res, next) {
         if(req.query && req.query.hasOwnProperty('access_token')){
@@ -18,7 +18,7 @@ exports.decodeToken = function(){
 };
 
 exports.verifyUser = function (token) {
-    console.log(token);
+   // console.log(token);
     return new Promise(function(resolve, reject){
         jwt.verify(token, process.env.JWT_SECRET, function(err, dectoken){
             console.log(token);
@@ -30,21 +30,29 @@ exports.verifyUser = function (token) {
     })
 
 };
+*/
 
 exports.signToken = function(user){
+    var jwtData = {
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname
+    }
     return jwt.sign(
-        {user: user},
+        {user: jwtData},
         config.secret
     );
 };
 
 exports.checkAuth = function(token){
-   // console.log(token);
     return new Promise(function(fulfill,reject){
-        jwt.verify(token,config.secret,function (err,user) {
-            if(err)reject(err);
+        console.log(token);
+        jwt.verify(token, config.secret, function (err, user) {
+            if(err)
+                reject(err);
             fulfill(user);
         })
     })
 
 };
+
