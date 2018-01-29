@@ -51,9 +51,6 @@ exports.login = function(req, res, next){
     }
 };
 
-
-
-
 function isLoggedIn(req, res, next){
     if(req.login())
         return next();
