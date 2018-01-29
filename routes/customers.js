@@ -7,59 +7,30 @@ var customers = require('../controllers/customersControllers');
 
 router.get('/customers', function (req, res, next) {
     res.render('customers', {
-                pageTitle: 'List of Builders' });
+                pageTitle: 'List of Builders',
+                user: req.user
+    });
     next();
 });
 
-router.get('/', customers.list, function(req, res, next) {
-         res.render('customers/index', {
-             pageTitle: 'Builders Company'
-         });
-});
-
 // get all customers
-router.get('/', function(req, res){
-    customers.list(req, res);
-
-
-});
+router.get('/', customers.list);
 
 //get single customer by id
-router.get('/show/:id', function(req, res ){
-    customers.show(req, res);
-});
+router.get('/profile/:id', customers.show);
 
-//create customer
-router.get('/create', function (req, res) {
-    customers.create(req, res);
-    res.render('create',{
-        pageTitle: 'Create Customers'
-    })
-});
-
-router.get('/registration', function (req, res) {
-    res.render('customers/registration', {pageTitle: 'Registration Page for customers'});
-});
-
+router.get('/registration',  customers.create);
 //save customer
-router.post('/save', function(req, res){
-    customers.save(req, res);
-});
+router.post('/registration', customers.save);
 
 // Edit customer
-router.get('/edit/:id', function(req, res){
-    customers.edit(req, res);
-});
+router.get('/edit/:id', customers.edit);
 
 // Edit update
-router.post('/update/:id', function(req, res){
-    customers.update(req, res);
-});
+router.post('/update/:id', customers.update);
 
 // Edit update
-router.post('/delete/:id', function (req, res) {
-    customers.delete(req, res);
-});
+router.post('/delete/:id', customers.delete);
 
 //Profile page
 router.get('/profile/:id',customers.profile);
