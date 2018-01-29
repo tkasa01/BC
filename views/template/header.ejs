@@ -24,20 +24,25 @@
                             <a href="/builders/registration">For builders</a>
                         </div>
                     </li>
-
-                    <li>
-                        <a class="topnav" href="/login" >
-                            <span>Login</span>
-                        </a>
-                    </li>
                     <li>
                         <a class="topnav" href="/photogallery" >
                             <span>Photo Gallery</span>
                         </a>
                     </li>
                     <li>
-                        <a class="topnav" href="/customer/logout" >
+                        <%if(user === null){%>
+                        <a class="topnav" href="/login" >
+                            <span>Login</span>
+                        </a>
+                        <%}else{%>
+                        <a class="topnav" href="/login/logout" >
                             <span>Logout</span>
+                        </a>
+                        <%}%>
+                    </li>
+                    <li>
+                        <a class="topnav" href="/" >
+                            <span>Urgently call customers to find a builders</span>
                         </a>
                     </li>
                 </ul>
