@@ -1,6 +1,5 @@
 /** created by tkasa 19/12/2017. ...*/
 var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
 var bcrypt = require('bcrypt-nodejs');
 
 var BuilderSchema = new mongoose.Schema({
@@ -20,32 +19,28 @@ var BuilderSchema = new mongoose.Schema({
     updated: {
         type: Date,
         default: Date.now
+    },
+    role:{
+        type: String,
+        default: "builder"
     }
 });
 
-
+//this middleware is encrypt the passwprd before the save it in the database
 BuilderSchema.pre('save', function (next) {
     if(!this.isModified('password'))return next();
     this.password = this.encryptPassword(this.password);
     next();
 });
 
-/*this middleware pre check if the builder already exist*/
-BuilderSchema.pre('save', function (next) {
-    var self = this;
-    Builder.find({email : self.email}, function (err, docs) {
-        if (!docs.length){
-            next();
-        }else{
-            console.log('user exists: ', self.email);
-            next(new Error("User exists!"));
-        }
-    });
-}) ;
-
-BuilderSchema.methods = {
-    authenticate:function (plaintextPassword) {
-        return bcrypt.compareSync(plaintextPassword, text.password);
+BuilderSchema.methods = {  //this method checks a user's password(on a login attempt) with bcrypt
+    authenticate:function (plaintextPassword, compareBcrypt) {
+        return bcrypt.compareSync(plaintextPassword, this.password, function(err, isMatch){
+            if(err){
+                return compareBcrypt(err);
+            }
+            compareBcrypt(null, isMatch);
+        });
     },
     encryptPassword: function(plaintextPassword){
         if(!plaintextPassword){
@@ -57,7 +52,6 @@ BuilderSchema.methods = {
     }
 };
 
-//BuilderSchema.plugin(uniqueValidator);
 
 var Builder =  module.exports = mongoose.model('Builder', BuilderSchema);
 
