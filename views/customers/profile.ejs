@@ -4,36 +4,57 @@
     <% include ../template/head.ejs %>
 </head>
 <body>
-<header>
-    <% include ../template/header.ejs %>
-</header>
-<h1><%- pageTitle %></h1>
-<div class="post">
-    <% include ../posts/posts.ejs %>
-</div>
-<div class="container">
-    <% if(locals.messages) { %>
-    <div class="alert alert-denger"><%= message.msg %></div>
-    <% } %>
-    <table class="list-table">
-        <tbody>
-        <tr>
-            <td>First name</td>
-            <td>:</td>
-            <td><%= customer.firstname%></td>
-        </tr>
-        <tr>
-            <td>Last name</td>
-            <td>:</td>
-            <td><%= customer.lastname%></td>
-        </tr>
-        </tbody>
-    </table>
+    <header>
+        <% include ../template/header.ejs %>
+    </header>
+        <h1><%- pageTitle %></h1>
 
-    <button type="submit">DELETE</button>
-</div>
-<footer>
-    <% include ../template/footer.ejs %>
-</footer>
+        <div class="post">
+            <% include ../posts/posts.ejs %>
+        </div>
+        <div class="container">
+            <h2> Hello  <%= customer.firstname%></h2>
+            <table class="list-table">
+                <tbody>
+                <tr>
+                    <td>First name</td>
+                    <td>:</td>
+                    <td><%= customer.firstname%></td>
+                </tr>
+                <tr>
+                    <td>Last name</td>
+                    <td>:</td>
+                    <td><%= customer.lastname%></td>
+                </tr>
+                <tr>
+                    <td>Date of birth</td>
+                    <td>:</td>
+                    <td><%= customer.dob%></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>:</td>
+                    <td><%= customer.email%></td>
+                </tr>
+                <tr>
+                    <td>Phone number</td>
+                    <td>:</td>
+                    <td><%= customer.phonenumber%></td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>:</td>
+                    <td><%= customer.address%></td>
+                </tr>
+                </tbody>
+            </table>
+            <h3><a href="/customers/edit/<%= customer._id%>">EDIT</a></h3>
+            <form action="/customers/delete/<%= customer._id%>" method="post">
+                <button type="submit">DELETE</button>
+            </form>
+        </div>
+    <footer>
+        <% include ../template/footer.ejs %>
+    </footer>
 </body>
 </html>

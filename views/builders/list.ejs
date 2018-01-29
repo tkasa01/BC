@@ -20,9 +20,10 @@
                 </thead>
                 <% for(var i=0; i<builders.length; i++) { %>
                         <tr>
-                            <td><a href="/builders/profile/<%= builders[i]._id%>"><%= builders[i].firstname%> <%= builders[i].lastname%></a></td>
-
-                            <td><%= builders[i].position%></td>
+                            <td><a href="/builders/profile/<%= builders[i]._id%>">
+                                                            <%= builders[i].firstname%>
+                                                            <%= builders[i].lastname%></a></td>
+                                                        <td><%= builders[i].position%></td>
                         </tr>
                 <% } %>
             </table>

@@ -11,7 +11,8 @@ router.use(function (req,res,next) {
     next();
 });
 
-//login
+
+//get login page
 router.get('/', function(req, res ){
     console.log(req.user);
     res.render('login', {
@@ -24,12 +25,14 @@ router.get('/', function(req, res ){
 
 });
 
+//post login page before login
+router.post('/', login.login);
 
 router.get('/profile/:id', function(req, res){
     res.render('profile',{user: req.user});
 });
 
-router.post('/', login.login);
+
 router.get('/logout',login.logout);
 
 

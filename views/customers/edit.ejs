@@ -13,7 +13,14 @@
             <tbody>
             <tr>
                 <td>Title</td>
-                <td><input value=" " name="title" value="<%= customer.title %>" /></td>
+                <td>
+                    <select name="title">
+                        <option selected="" value="<%= customer.title %>"/>--</option>
+                        <option value="mr"> Mr</option>
+                        <option value="mrs"> Mrs</option>
+                        <option value="ms"> Ms</option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td>First Name</td>
@@ -22,10 +29,6 @@
             <tr>
                 <td>Lasr Name</td>
                 <td><input type="text" name="lastname" value="<%= customer.lastname %>" /></td>
-            </tr>
-            <tr>
-                <td>Position</td>
-                <td><input type="text" name="position" value="<%= customer.position %>" /></td>
             </tr>
             <tr>
                 <td>DOB</td>

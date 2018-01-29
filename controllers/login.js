@@ -1,64 +1,71 @@
 var Builder = require('../models/Builder');
 var Customer = require('../models/Customer');
-var Promise = require('promise'); // fulfill, reject
-//var validation = require('./handlers/validation');
 var auth = require('../auth');
 var bcrypt = require('bcrypt-nodejs');
 var store = require('store');
-var errors ,
-    messages ;
 
+function checkData(req, res, next){
+    var user = req.body;
+    if(!user.email){
+        global.errors = ['The user is not found'];
+        res.redirect("/login");
+    }
+    next();
+}
 exports.login = function(req, res, next){
-        var data = req.body;
-        if(data.email && data.password){
-            Builder.findOne({'email': req.body.email}, function (err, builder) {
-                if (builder) {
-                    if (bcrypt.compareSync(req.body.password, builder.password)) {
-                        var token = auth.signToken(builder);//login successful
-                        store.set('jwt', token);
-                        res.redirect('/');
-                    } else {
-                        console.log('incorrect passport');
-                    }
+    var data = req.body;
+    if(data.email && data.password){
+        Builder.findOne({'email': req.body.email},function (err, builder) {
+            if (builder) {
+                 if (bcrypt.compareSync(req.body.password, builder.password)) {
+                    var token = auth.signToken(builder); //login successful
+                    store.set('jwt', token);
+                    res.redirect('/');
                 } else {
-                    Customer.findOne({'email': req.body.email}, function (err, customer) {
-                        if (customer) {
-                            if (bcrypt.compareSync(req.body.password, customer.password)){
-                                var token = auth.signToken(customer);
-                                store.set('jwt', token);
-                                res.redirect('/');
-                                console.log(customer);
-                            } else {
-                                console.log('user not found, sorry');
-                            }
-                        }
-                    });
+                    global.errors = ['incorrect password'];
+                    res.redirect("/login");
                 }
-            })
-        }else{
-            global.errors = ["Please enter email and password"];
-            res.redirect("/login");
-        }
-
-
+            }else{
+                Customer.findOne({'email': req.body.email}, function (err, customer) {
+                    if (customer) {
+                        if (bcrypt.compareSync(req.body.password, customer.password)){
+                            var token = auth.signToken(customer);
+                            store.set('jwt', token);
+                            res.redirect('/');
+                            console.log(customer);
+                        } else {
+                            global.errors = ['sorry'];
+                            // errors.push('Sorry, user is not found');
+                            res.redirect("/login");
+                        }
+                    }else{
+                        global.errors = ['The user is not found'];
+                        res.redirect("/login");
+                    }
+                });
+            }
+        })
+    }else{
+        global.errors = ["Please enter an email and a password"];
+        res.redirect("/login");
+    }
 };
 
+
+
+
+function isLoggedIn(req, res, next){
+    if(req.login())
+        return next();
+    res.redirect('/');
+}
 
 exports.logout = function(req,res,next){
     store.remove('jwt');
-   // messages.push('You are log out');
+    global.messages = ['You are log out'];
     res.redirect('/');
 };
 
-
-exports.displayErrors = function(){
-    if(errors.length > 0){
-        return errors;
-    }else{
-        messages.push('Success, you are login');
-        return messages;
-    }
-};
 
 
 exports.decodeToken = function(){
@@ -69,3 +76,93 @@ exports.decodeToken = function(){
         checkToken(req, res, next);
     }
 };
+
+
+/*
+ exports.login = function(req, res, next){
+ var data = req.body;
+    if(data.email && data.password){
+         Builder.findOne({'email': req.body.email}, function (err, builder) {
+           if (builder) {
+             if (bcrypt.compareSync(req.body.password, builder.password)) {
+                 var token = auth.signToken(builder); //login successful
+                 store.set('jwt', token);
+                 res.redirect('/');
+             } else {
+                 global.errors = ['incorrect password'];
+                 res.redirect("/login");
+             }
+         } else {
+         Customer.findOne({'email': req.body.email}, function (err, customer) {
+         if (customer) {
+         if (bcrypt.compareSync(req.body.password, customer.password)){
+         var token = auth.signToken(customer);
+         store.set('jwt', token);
+         res.redirect('/');
+         console.log(customer);
+         } else {
+         global.errors = ['sorry'];
+         // errors.push('Sorry, user is not found');
+         res.redirect("/login");
+         }
+         }
+         });
+        }
+ })
+ }else{
+ global.errors = ["Please enter an email and a password"];
+ res.redirect("/login");
+ }
+ };
+ */
+
+/*
+ exports.login = function(req, res, next) {
+ var errors  = [];
+ var data = req.body;
+
+ if (data.email && data.password) {
+ Builder.findOne({'email': req.body.email}, function (err, builder) {
+ if (!builder) {
+ global.errors = ['The user is not found'];
+ res.redirect("/login");
+ }
+ else {
+ if (bcrypt.compareSync(req.body.password, builder.password)) {
+ var token = auth.signToken(builder); //login successful
+ store.set('jwt', token);
+ //res.render('./profile/:id');
+ res.redirect('/');
+ } else {
+ global.errors = ['Incorrect password'];
+ res.redirect("/login");
+ }
+ }
+ }) ||
+ Customer.findOne({'email': req.body.email}, function (err, customer) {
+ if (!customer) {
+ global.errors = ['The Customer is not found'];
+ res.redirect("/login");
+ }
+ else {
+ if (bcrypt.compareSync(req.body.password, customer.password)) {
+ var token = auth.signToken(customer);
+ store.set('jwt', token);
+ // res.render('./customers/profile/:id');
+ res.redirect('/');
+ console.log(customer);
+ } else {
+ global.errors = ['Incorrect password'];
+ //errors.push('Incorrect password');
+ res.redirect("/login");
+ }
+ }
+
+ });
+
+ }else{
+ global.errors = ["Please enter an email and a password"];
+ res.redirect("/login");
+
+ };
+ */

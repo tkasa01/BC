@@ -2,23 +2,22 @@
 <html>
 <head>
     <% include ../template/head.ejs %>
-
 </head>
 <body>
 <header>
     <% include ../template/header.ejs %>
 </header>
 <div class="container">
-    <h3><a href="/customers">Builders List</a></h3>
-    <h1>Registration page for Customers</h1>
-    <form action="/customers/save" method="post">
+    <h1><%= pageTitle%></h1>
+    <form action="/customers/registration" method="post">
+        <% include ../template/messages.ejs %>
         <table>
             <tbody>
             <tr>
-                <td>Titile</td>
+                <td>Title</td>
                 <td>
-                    <select type="value" name="customertitle">
-                        <option value="--">--</option>
+                    <select type="text" name="title">
+                        <option selected="" value="Default">--</option>
                         <option value="mr"> Mr</option>
                         <option value="mrs"> Mrs</option>
                         <option value="ms"> Ms</option>

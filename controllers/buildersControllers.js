@@ -53,7 +53,7 @@ builderController.show = function(req, res){
                 pageTitle: 'Builder\'s a home page',
                 user: req.user,
                 builder: builder,
-                owner: req.params.id === req.user.user.id ? true : false,
+               // owner: req.params.id === req.user.user.id ? true : false,
                 reviews: null //
                  });
         }

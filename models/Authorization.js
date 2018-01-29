@@ -9,5 +9,6 @@ let roles ={
     guest:['read']
 };
 exports.can = function(role, action){
-    return roles[role].indexOf(action) !== -1 ? true : false;
+    return roles[role].indexOf(action) !== -1;
+   // return roles[role].indexOf(action) !== -1 ? true : false;
 };
