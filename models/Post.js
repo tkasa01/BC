@@ -7,11 +7,11 @@ var PostSchema = new Schema({
         required: true,
         unique: true
     },
-    text: {
+    content: {
         type:String,
         required: true
        },
-    create:{
+    timestamp:{
         type: Date
     },
     update:{
@@ -26,6 +26,11 @@ var PostSchema = new Schema({
     builder:{
         type: String,
         default: null //if !null then its a review
+    },
+    review:{
+        title: String,
+        description: String,
+        rating: Number
     }
 });
 
@@ -44,3 +49,4 @@ function post(text){
 }
 
 var Post = module.exports = mongoose.model('Post', PostSchema);
+
