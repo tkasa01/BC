@@ -2,14 +2,10 @@
  * Created by tkasa on 07/01/2018.
  */
 
-
-
 var mongoose = require('mongoose');
 var Post = require('../models/Post');
+var promise = require('promise');
 
-var passport = require('passport');
-
-//var flash = require('connect-flash');
 //var shortid = require('shortid');
 //var validation = require('./validation');
 
@@ -23,19 +19,20 @@ postController.list = function (req, res, next) {
         })
 };
 */
+
 postController.list = function (req, res, next) {
-    Post.find({}).populate('author').exec().then(function (err, posts) {
+    Post.find({}).populate('author').exec(function (err, posts) {
         if(err){
             res.send(err);
         }else{
-            res.render('/posts', {pageTitle: 'Recent posts from customers' , posts:posts});
+            res.render('../views/posts/posts', {pageTitle: 'Recent posts from customers' , posts:posts});
         }
         next();
     });
 };
 
 
-postController.params = function(req, res, next){
+postController.params = function(req, res, next, id){
     Post.findById(id).exec(function(err, post){
         if(!post){
             next(new Error('No post found from this id'));
@@ -46,13 +43,16 @@ postController.params = function(req, res, next){
     })
 };
 
-postController.postPost = function(req, res, next){
-    var newPost = req.body;
-    Post.create(newPost).populate('author').exec(function(err, post){
+exports.writePost = function(req, res, next){
+    //var postSorted = post.object('Post').sorted('timestamp', true);
+    Post.create( title = req.body.title,
+               content = req.body.content,
+               author  = req.body.author).populate('author').exec(function(err, post){
         if(err){
             next(err);
         }else{
-            res.json(post);
+            res.render('/');
+           // res.json(post);
         }
     })
 };
