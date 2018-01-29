@@ -5,27 +5,29 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
 var CustomerSchema = new mongoose.Schema({
-    title: {
-        value:String
-    },
+    title: {type:String},
     firstname: {type:String,required: true},
     lastname:{type: String,required: true},
     dob: {type: Date},
-    email: {type: String, trim: true},
+    email: {type: String, required: true, trim: true},
     phonenumber: {type: String,required: true, length: 11},
     address: {
                 state:{type: String},
                 city:{type: String},
                 postcode:{type:Number, require: true}
              },
-    hash: {type: String, required:true},
+    password: {type: String, required:true},
     updated: {
         type: Date,
         default: Date.now
+    },
+    role:{
+        type: String,
+        default: "customer"
     }
     /*
     post: [{ref:'post',    //inverse association of denormalisation data
-            type: Schema.Types.ObjectId
+            type: mongoose.Schema.Types.ObjectId
            }]*/
 });
 
@@ -35,21 +37,9 @@ CustomerSchema.pre('save', function (next) {
     next();
 });
 
-CustomerSchema.pre('save', function (next) {
-    var self = this;
-    Customer.find({email : self.email}, function (err, docs) {
-        if (!docs.length){
-            next();
-        }else{
-            console.log('user exists: ', self.email);
-            next(new Error("User exists!"));
-        }
-    });
-}) ;
-
 CustomerSchema.methods = {
     authenticate:function (plaintextPassword) {
-        return bcrypt.compareSync(plaintextPassword, text.password);
+        return bcrypt.compareSync(plaintextPassword, this.password);
     },
     encryptPassword: function(plaintextPassword){
         if(!plaintextPassword){
