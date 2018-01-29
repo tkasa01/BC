@@ -3,7 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Customer = require('../models/Customer');
-var validation = require('./validation');
+var validation = require('./handlers/validation');
 var customerController = {};
 
 //all list of customers
@@ -30,7 +30,7 @@ var customerController = {};
             console.log("error: ", err);
         }
         else{
-            res.render('../views/customers/show', {
+            res.render('../views/customers/profile', {
                 pageTitle: 'Customer\'s a home page',
                 customer: customer,
                 user: req.user
@@ -52,25 +52,25 @@ customerController.create = function (req, res) {
 //save new customer
 customerController.save = function(req, res) {
     validation.customer(req.body).then(function(validatedUser) {
+        console.log(req.body);
         var customer = new Customer(validatedUser);
         customer.save(function (err, customer) {
             if (err) {
                 console.log(err);
-                res.render("../views/customers/registration", {
-                    pageTitle: 'Registration Page for Customers',
-                    user: req.user
-                });
+                res.json(err);
             } else {
-                console.log("Successfully created a customer.");
+                console.log(customer);
                 res.redirect('/login');
             }
         });
     },function(err){
+        console.log(err);
         errors = err;
-        res.redirect("/customer/registration");
+        res.redirect('/customers/registration');
     });
     global.errors = '';
 };
+
 
 //add by id function
 customerController.edit = function(req, res) {
