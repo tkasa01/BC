@@ -19,7 +19,7 @@ var ImagesSchema = new mongoose.Schema({
         ref: 'builder',
         required: true
     },
-    categories:[{type: Schema.Types.ObjectId, ref:'category'}]
+    categories:[{type: mongoose.Schema.Types.ObjectId, ref:'category'}]
 });
 
-module.exports = mongoose.model('Image', ImagesSchema);
+var Image = module.exports = mongoose.model('Image', ImagesSchema);
