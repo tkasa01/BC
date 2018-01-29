@@ -18,8 +18,10 @@ router.get('/', function(req, res ){
         builder: req.builder,
         user: req.user,
         pageTitle: 'Login page',
-        errors: {},
-        message: ''});
+        errors: global.errors
+    });
+    global.errors = '';
+
 });
 
 
@@ -27,7 +29,7 @@ router.get('/profile/:id', function(req, res){
     res.render('profile',{user: req.user});
 });
 
-router.post('/',login.login);
+router.post('/', login.login);
 router.get('/logout',login.logout);
 
 
