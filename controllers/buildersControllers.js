@@ -3,8 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Builder = require('../models/Builder');
-var shortid = require('shortid');
-var validation = require('./validation');
+var validation = require('./handlers/validation');
 var builderController = {};
 
 //all list of builders
@@ -54,6 +53,7 @@ builderController.show = function(req, res){
                 pageTitle: 'Builder\'s a home page',
                 user: req.user,
                 builder: builder,
+                owner: req.params.id === req.user.user.id ? true : false,
                 reviews: null //
                  });
         }
@@ -83,7 +83,7 @@ builderController.save = function(req, res) {
             }
         });
     },function(err){
-        errors = err;
+        global.errors = err;
         res.redirect("/builders/registration");
 
     });
@@ -95,6 +95,7 @@ builderController.edit = function(req, res) {
     Builder.findOne({_id: req.params.id}).exec(function (err, builder) {
         if (err) {
             console.log("Error:", err);
+            res.status(400).send("builder doesn't exist");
         }
         else {
             res.render("../views/builders/edit", {
@@ -153,7 +154,11 @@ builderController.update = function(req, res){
  module.exports = builderController;
 
 
-
+/*
+* personSchema.virtual('fullName').get(function () {
+ return this.name.first + ' ' + this.name.last;
+ });
+* */
 
 
 
