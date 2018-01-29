@@ -9,20 +9,11 @@ var methodOverride = require('method-override');
 
 var validator = require('validator');
 var _ = require('lodash');
-var jwt = require('jsonwebtoken');
-var passport = require('passport');
-var passportJWT = require('passport-jwt');
-var ExtractJwt = passportJWT.ExtractJwt;
-var JwtStrategy = passportJWT.Strategy;
 
-var flash = require('connect-flash');
+//var flash = require('connect-flash');
 var api = require('./api/router');
-var imagesDownload = require('./api/mongoose');
-//var error = require('./error.js');
 require('./middlewareApp')(app);
 
-//require('./config/passport')(app, passport);
-//require('./db');
 
 mongoose.Promise = global.Promise;
 //var MongoStore = require('connect-mongo')(session);
@@ -37,10 +28,9 @@ app.locals.siteTitle = 'Building Company';
 
 /*it is a middleware function that gives the value of that id, it is a forth argument */
 app.param('id', function(req,res, next,id){
-        console.log(id);
+        console.log("this is my id" +id);
         next();
 });
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -62,20 +52,6 @@ app.use(session({
     cookie: {maxAge: 180*60*1000} //2 hours
 }));
 
-//================================================================//
-//Express Messages Middleware
-//app.use(function (req, res, next) {
-  //  res.locals.sessionFlash = req.sessionFlash;
-    //res.locals.messages = require('express-messages')(req, res);
-   // delete req.locals.session.sessionFlash;
-   // next();
-//});
-
-//===================================================================
-
-app.use(passport.initialize());
-app.use(passport.session());//persistent login session
-
 require('./models/Builder');
 var Builder = mongoose.model('Builder');
 
@@ -84,6 +60,9 @@ var Customer = mongoose.model('Customer');
 
 require('./models/Post');
 var Post = mongoose.model('Post');
+
+require('./models/Images');
+var Image = mongoose.model('Image');
 
 
 // catch 404 and forward to error handler
@@ -113,8 +92,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
 
 
 console.log('hello');
