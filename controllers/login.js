@@ -1,54 +1,65 @@
 var Builder = require('../models/Builder');
 var Customer = require('../models/Customer');
-var validation = require('./validation');
+var Promise = require('promise'); // fulfill, reject
+//var validation = require('./handlers/validation');
 var auth = require('../auth');
-var builderController = {};
 var bcrypt = require('bcrypt-nodejs');
 var store = require('store');
+var errors ,
+    messages ;
 
-builderController.getEmail = function(req, res){
-    console.log(req.email);
-    if(req.email){
-        return res.send({
-            email: req.email,
-            massage: req.flash('success')
-        })
-    }
-    res.send({
-        errors:  ('not authorized')
-    })
-};
-
-exports.login = function(req,res,next){
-    Builder.findOne({'email' : req.body.email},function(err,builder){
-        if(builder){
-            if(bcrypt.compareSync(req.body.password, builder.password)){
-                var token = auth.signToken(builder);//login successful
-                store.set('jwt',token);
-                res.redirect('/');
-            }else{
-                console.log('incorrect passport');
-            }
+exports.login = function(req, res, next){
+        var data = req.body;
+        if(data.email && data.password){
+            Builder.findOne({'email': req.body.email}, function (err, builder) {
+                if (builder) {
+                    if (bcrypt.compareSync(req.body.password, builder.password)) {
+                        var token = auth.signToken(builder);//login successful
+                        store.set('jwt', token);
+                        res.redirect('/');
+                    } else {
+                        console.log('incorrect passport');
+                    }
+                } else {
+                    Customer.findOne({'email': req.body.email}, function (err, customer) {
+                        if (customer) {
+                            if (bcrypt.compareSync(req.body.password, customer.password)){
+                                var token = auth.signToken(customer);
+                                store.set('jwt', token);
+                                res.redirect('/');
+                                console.log(customer);
+                            } else {
+                                console.log('user not found, sorry');
+                            }
+                        }
+                    });
+                }
+            })
         }else{
-    Customer.findOne({'email' : req.body.email},function (err,customer){
-         if(customer){
-             if(bcrypt.compareSync(req.body.password, customer.password))
-                 var token = auth.signToken(customer);
-                 store.set('jwt', token);
-                 res.redirect('/');
-                    console.log(customer);
-         }else{
-                console.log('user not found, sorry');
-         }
-    })
+            global.errors = ["Please enter email and password"];
+            res.redirect("/login");
         }
-    });
+
+
 };
+
 
 exports.logout = function(req,res,next){
     store.remove('jwt');
+   // messages.push('You are log out');
     res.redirect('/');
 };
+
+
+exports.displayErrors = function(){
+    if(errors.length > 0){
+        return errors;
+    }else{
+        messages.push('Success, you are login');
+        return messages;
+    }
+};
+
 
 exports.decodeToken = function(){
     return function(req, res, next){
@@ -57,19 +68,4 @@ exports.decodeToken = function(){
         }
         checkToken(req, res, next);
     }
-};
-
-exports.getFreshUser = function () {
-    return function(req, res, next){
-        Builder.findById(req.builder._id).then(function(user){
-            if(!user){
-                res.status(401).send('No user with the given email')
-            }
-        })
-    }
-};
-
-
-exports.builder = function(email){
-
 };
