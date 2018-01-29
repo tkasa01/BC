@@ -5,12 +5,11 @@ var cryptPassword = require('password-hash-and-salt');
 var async = require('async');
 var Promise = require('promise'); // fulfill, reject
 var locale = require('locale');
-var Builder = require('../models/Builder');
-var Customer = require('../models/Customer');
+var Builder = require('../../models/Builder');
+var Customer = require('../../models/Customer');
 
 var errors;
 var messages;
-//var validatadForm = {};
 const MIN_AGE = 18;
 const NAME_LENGTH = {min: 2, max: 15};
 const PHONE_LENGTH = 10;
@@ -101,7 +100,7 @@ exports.builder = function(form){
     });
 };
 
-exports.customer = function(body){
+exports.customer = function(form){
     return new Promise(function(fulfill,reject){
         errors   = [];
         messages = [];
