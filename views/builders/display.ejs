@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<div class="container">
+    <h1>Please insert builder's details</h1>
+    <form action="/builders/show" method="post">
+        <table class="list-table">
+            <tr>
+                <td>First Name</td>
+                <td><input type="text" name="firstname" /></td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td><input type="text" name="lastname" /></td>
+            </tr>
+            <tr>
+                <td>Profession</td>
+                <td><input type="text" name="position" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button>Find</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+</body>
+</html>
