@@ -13,6 +13,8 @@ router.post('/registration',builders.save);
 
 router.get('/profile/:id',builders.show);
 
+router.get('/display', builders.displayPage);
+
 router.post('/show', builders.findByName);
 
 router.get('/edit/:id', builders.edit);// Edit builder
