@@ -20,8 +20,19 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connect('mongodb://localhost/BC',{
   useMongoClient: true
 });
-console.log('listen on port 3000' + db);
 
+require('./models/Builder');
+var Builder = mongoose.model('Builder');
+
+require('./models/Customer');
+var Customer = mongoose.model('Customer');
+
+require('./models/Post');
+var Post = mongoose.model('Post');
+
+require('./models/Images');
+var Image = mongoose.model('Image');
+console.log('listen on port 3000' + db);
 
 //app.locals.info = 'flash';
 app.locals.siteTitle = 'Building Company';
@@ -51,19 +62,6 @@ app.use(session({
    // }),
     cookie: {maxAge: 180*60*1000} //2 hours
 }));
-
-require('./models/Builder');
-var Builder = mongoose.model('Builder');
-
-require('./models/Customer');
-var Customer = mongoose.model('Customer');
-
-require('./models/Post');
-var Post = mongoose.model('Post');
-
-require('./models/Images');
-var Image = mongoose.model('Image');
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
