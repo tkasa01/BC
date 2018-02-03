@@ -6,12 +6,10 @@ var Post = require('../models/Post');
 var Customer = require('../models/Customer');
 var promise = require('promise');
 
-//var shortid = require('shortid');
-//var validation = require('./validation');
-
 var postController = {};
 
-exports.list = function (req, res) {
+postController.list = function (req, res) {
+    console.log('heiiii');
     Post.find({}).populate('author').exec(function (err, posts) {
         if(err){
             res.send(err);
@@ -25,27 +23,31 @@ exports.list = function (req, res) {
     });
 };
 
+postController.create = function (req, res) {
+    console.log('create function');
+    res.render('./customers/profile',{
+        pageTitle: 'Registration Page for Customers',
+        user: req.user,
+        errors: global.errors
+    });
+    global.errors = '';
 
-exports.savePost = function(req, res){
-    console.log('postPage');
+};
+
+postController.savePost = function(req, res){
     //var postSorted = post.object('Post').sorted('timestamp', true);
-
-    var post = new Post({title:req.body.title,
-                         content:req.body.content,
-                         timestamp:req.body.timestamp,
-                         author:req.body.author});
-    console.log(post);
-    post.author = Customer;
+    var post = new Post(req.body);
     post.save(function (err, post) {
         if (err) {
             res.send(err);
         } else {
-            res.render('./posts', {post: post})
+            console.log(post);
+            res.render('./posts/posts');
         }
     });
 };
 
-
+/*
 postController.params = function(req, res, next, id){
     Post.findById(id).exec(function(err, post){
         if(!post){
@@ -82,9 +84,9 @@ postController.deletePost = function (req, res, next) {
     });
 };
 
+*/
 
-
-
+module.exports = postController;
 
 
 
