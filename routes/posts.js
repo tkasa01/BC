@@ -3,18 +3,19 @@
  */
 var express = require('express');
 var postRouter = express.Router();
+var mongoose = require('mongoose');
 var posts = require('../controllers/postControllers');
 
-postRouter.get('/', function (req,res) {
-    res.render('../views/posts/posts' );
+postRouter.post('/customers/profile',  posts.savePost, function (req, res){
+    console.log('hey');
+    res.send('add a book');
 });
 
-postRouter.post('/write', posts.writePost, function (req,res) {
-    res.render('../views/posts/posts');
-});
+postRouter.get('/posts', posts.list);
+postRouter.get('/posts',  posts.create);
 
 /*
-postRouter.post( '/posts',posts.postPost);
+ postRouter.post( '/posts',posts.savePost);
 postRouter.get('/:id',posts.getOne);
 postRouter.put('/:id',posts.update);
 postRouter.delete('/:id',posts.deletePost);
