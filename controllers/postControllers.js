@@ -1,33 +1,47 @@
 /**
  * Created by tkasa on 07/01/2018.
  */
-
 var mongoose = require('mongoose');
 var Post = require('../models/Post');
+var Customer = require('../models/Customer');
 var promise = require('promise');
 
 //var shortid = require('shortid');
 //var validation = require('./validation');
 
 var postController = {};
-/*
-postController.list = function (req, res, next) {
-    Post.find({}).populate('author').exec().then(function (posts) {
-        res.render('/posts', {pageTitle: 'Recent posts from customers', posts:posts});
-            },function (err) {
-                 next(err);
-        })
-};
-*/
 
-postController.list = function (req, res, next) {
+exports.list = function (req, res) {
     Post.find({}).populate('author').exec(function (err, posts) {
         if(err){
             res.send(err);
         }else{
-            res.render('../views/posts/posts', {pageTitle: 'Recent posts from customers' , posts:posts});
+            res.render('./posts/posts', {
+                pageTitle: 'Recent posts from customers',
+                posts:posts,
+                user:req.user
+            });
         }
-        next();
+    });
+};
+
+
+exports.savePost = function(req, res){
+    console.log('postPage');
+    //var postSorted = post.object('Post').sorted('timestamp', true);
+
+    var post = new Post({title:req.body.title,
+                         content:req.body.content,
+                         timestamp:req.body.timestamp,
+                         author:req.body.author});
+    console.log(post);
+    post.author = Customer;
+    post.save(function (err, post) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.render('./posts', {post: post})
+        }
     });
 };
 
@@ -43,19 +57,7 @@ postController.params = function(req, res, next, id){
     })
 };
 
-exports.writePost = function(req, res, next){
-    //var postSorted = post.object('Post').sorted('timestamp', true);
-    Post.create( title = req.body.title,
-               content = req.body.content,
-               author  = req.body.author).populate('author').exec(function(err, post){
-        if(err){
-            next(err);
-        }else{
-            res.render('/');
-           // res.json(post);
-        }
-    })
-};
+
 
 postController.update = function (req, res) {
         var post = req.post;
