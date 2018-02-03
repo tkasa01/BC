@@ -19,8 +19,8 @@ var PostSchema = new Schema({
         default: Date.now()
     },
     author:{
-        type:Schema.Types.ObjectId,
-        ref: 'customer',  //from customer collection
+        type: Schema.Types.ObjectId,
+        ref: 'Customer',  //from customer collection
         required: true
     },
     builder:{
@@ -34,12 +34,19 @@ var PostSchema = new Schema({
     }
 });
 
+
+
 //this middleware make sure that this post is created from this author
+/*
 PostSchema.pre('save', function (next) {
-    this.text = post(this.author); //slygify in the video
+    this.content  = Post(this.author); //slygify in the video
     next();
 });
-
+PostSchema.pre('validate', function(next){
+    if(!this.author)
+    next();
+});
+*/
 function post(text){
     return text.toString().toLowerCase()
         .replace(/\s+/g,'-') //replace spaces with -
