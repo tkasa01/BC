@@ -8,7 +8,7 @@ router.use('/', index);
 router.use('/customers', customers);
 router.use('/builders',builders);
 router.use('/login', require('../routes/login'));
-router.use('/photogallery',require('../routes/images'));
 router.use('/posts', require('../routes/posts'));
+router.use('/photogallery',require('../routes/images'));
 //router.use(require('../config/passport'));
 module.exports = router;
