@@ -20,23 +20,22 @@ builderController.list = function(req, res) {
         }
     });
 };
+
 builderController.displayPage = function(req, res){
     res.render('builders/display', {
         pageTitle: 'Found by name',
-        user: req.user,
-        errors: global.errors
+        user: req.user
     });
-    global.errors = '';
 };
 
 builderController.findByName = function(req, res){
-     Builder.find({'firstname': req.body.firstname} || {'lastname':req.body.lastname} || {'position': req.body.position}).exec(function (err, builder ) {
+     Builder.find({'firstname': req.body.firstname} && {'lastname':req.body.lastname} && {'position': req.body.position}).exec(function (err, builder ) {
         if(err || !builder){
-            global.errors ='Not found';
+            global.errors =['Not found'];
             res.send('non found');
         }else{
             res.render('../views/builders/show',{
-                pageTitle: 'Found by name' ,
+
                 builder:builder,
                 user: req.user
             });
@@ -53,7 +52,6 @@ builderController.show = function(req, res){
                 pageTitle: 'Home page',
                 builder: builder,
                 user: req.user
-
             });
         }
         else{
