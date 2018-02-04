@@ -19,10 +19,24 @@ var PostSchema = new Schema({
         default: Date.now()
     },
     author:{
+            type: Schema.Types.ObjectId,
+            ref: "Customer",
+
+            required: function () {
+                return this.ref != null;
+            }
+    }
+
+    /*,
+    author:{
         type: Schema.Types.ObjectId,
         ref: 'Customer',  //from customer collection
-        required: true
-    },
+        required: function () {
+            return this.ref != null;
+        }
+
+    })
+
     builder:{
         type: String,
         default: null //if !null then its a review
@@ -31,22 +45,23 @@ var PostSchema = new Schema({
         title: String,
         description: String,
         rating: Number
-    }
+    }*/
 });
 
 
 
 //this middleware make sure that this post is created from this author
-/*
+
 PostSchema.pre('save', function (next) {
     this.content  = Post(this.author); //slygify in the video
     next();
 });
+
 PostSchema.pre('validate', function(next){
     if(!this.author)
     next();
 });
-*/
+
 function post(text){
     return text.toString().toLowerCase()
         .replace(/\s+/g,'-') //replace spaces with -
