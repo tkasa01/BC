@@ -3,16 +3,18 @@
  */
 var express = require('express');
 var postRouter = express.Router();
-var mongoose = require('mongoose');
 var posts = require('../controllers/postControllers');
 
-postRouter.post('/customers/profile',  posts.savePost, function (req, res){
-    console.log('hey');
-    res.send('add a book');
+
+postRouter.post('/posts',  posts.savePost,function (req, res) {
+    console.log('kuu');
+    res.send('POST request to the homepage');
 });
 
+
+
 postRouter.get('/posts', posts.list);
-postRouter.get('/posts',  posts.create);
+
 
 /*
  postRouter.post( '/posts',posts.savePost);
