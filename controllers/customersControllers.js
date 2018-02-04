@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Customer = require('../models/Customer');
+var Post = require('../models/Post');
 var validation = require('./handlers/validation');
 var customerController = {};
 
@@ -54,6 +55,11 @@ customerController.save = function(req, res) {
     validation.customer(req.body).then(function(validatedUser) {
         console.log(req.body);
         var customer = new Customer(validatedUser);
+        /*
+        var post = Post.findById(req.params.Post);
+        post.exec(function(err, post){
+            if(err)return next(err)
+        });*/
         customer.save(function (err, customer) {
             if (err) {
                 console.log(err);
