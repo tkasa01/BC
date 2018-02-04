@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../template/head.ejs %>
+</head>
+<body>
+<header>
+    <% include ../template/header.ejs %>
+</header>
+<h1><%- pageTitle %></h1>
+<div class="post">
+    <h2>Recent posts from customers</h2>
+    <form action="/posts/posts" method="post">
+        <td>Title</td>
+        <td>:</td>
+        <input type="text" name="title" /><br/>
+        <textarea name="content" cols="50" rows="5" charswidth="23"></textarea>
+        <tr>
+            <td colspan="2"><button type="submit">Save</button></td>
+        </tr>
+    </form>
+</div>
+<footer>
+    <% include ../template/footer.ejs %>
+</footer>
+</body>
+</html>
