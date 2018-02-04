@@ -20,7 +20,8 @@ exports.login = function(req, res, next){
                  if (bcrypt.compareSync(req.body.password, builder.password)) {
                     var token = auth.signToken(builder); //login successful
                     store.set('jwt', token);
-                    res.redirect('/');
+                    console.log(builder);
+                    res.redirect('/builders/profile/' + builder.id);
                 } else {
                     global.errors = ['Incorrect password'];
                     res.redirect("/login");
@@ -31,7 +32,8 @@ exports.login = function(req, res, next){
                         if (bcrypt.compareSync(req.body.password, customer.password)){
                             var token = auth.signToken(customer);
                             store.set('jwt', token);
-                            res.redirect('/');
+                            res.redirect('/customers/profile/' + customer.id);
+                            //res.redirect('/');
                             console.log(customer);
                         } else {
                             global.errors = ['Incorrect password'];
@@ -50,11 +52,6 @@ exports.login = function(req, res, next){
     }
 };
 
-function isLoggedIn(req, res, next){
-    if(req.login())
-        return next();
-    res.redirect('/');
-}
 
 exports.logout = function(req,res,next){
     store.remove('jwt');
@@ -72,4 +69,3 @@ exports.decodeToken = function(){
         checkToken(req, res, next);
     }
 };
-
