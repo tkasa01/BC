@@ -7,8 +7,7 @@ var Customer = require('../models/Customer');
 
 var postController = {};
 
-postController.list = function (req, res) {
-
+postController.list = function (req, res, next) {
     Post.find({}).populate('author').exec(function (err, posts) {
         if(err){
             res.send(err);
@@ -16,16 +15,20 @@ postController.list = function (req, res) {
             res.render('./posts/posts', {
                 pageTitle: 'Recent posts from customers',
                 posts:posts,
-                user:req.user,
-                author: req.author
+                user: req.user
             });
         }
-    });
+    }
+    );
 };
 
 postController.savePost = function(req, res, next) {
     //var postSorted = post.object('Post').sorted('timestamp', true);
-    var post = new Post({content: req.body.content, title: req.body.title,  author: req.body.author});
+    var post = new Post({_id: new mongoose.Types.ObjectId(),
+                             title:req.body.title,
+                            content: req.body.content,
+                            author:req.body.author
+                            });
     console.log(post);
     post.save(function (err, post) {
         if (err) {
@@ -51,14 +54,18 @@ postController.savePost = function(req, res, next) {
 
 
 postController.params = function(req, res, next, id){
-    Post.findById(id).populate('author').exec(function(err, post, author){
+    Post.findById(id).populate('author', 'email').exec().then(function(err, post){
         if(!post){
             next(new Error('No post found from this id'));
         }else{
-            req.author = author;
+            post.title = req.body.title;
+            post.content = req.body.content;
+            post.author = req.body.author;
             req.post = post;
             next();
         }
+    },function(err){
+        next(err);
     })
 };
 
