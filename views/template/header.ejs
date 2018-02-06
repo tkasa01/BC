@@ -7,16 +7,29 @@
                         <a class="logo" href="/"><img src="http://localhost:3000/images/logo.png" alt="The Building Company- Providing
                            qualified builders to privite works">
                         </a>
-                    <li>
-                        <a class="topnav" href="/location" >
-                            Search in location
-                        </a>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Search a builder</a>
+                        <div class="dropdown-content">
+                            <a href="/builders/display">Find for the name</a>
+                            <a href="/location">Find for location</a>
+                        </div>
                     </li>
                     <li>
                         <a class="topnav" href="/builders/list" >
                             <span>Builders list</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="topnav" href="/photogallery" >
+                            <span>Photo Gallery</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="topnav" href="/posts/posts" >
+                            <span>Urgently call customers to find a builders</span>
+                        </a>
+                    </li>
+                        <%if(user === null){%>
                     <li class="dropdown">
                         <a href="javascript:void(0)" class="dropbtn">Registration page</a>
                         <div class="dropdown-content">
@@ -25,26 +38,23 @@
                         </div>
                     </li>
                     <li>
-                        <a class="topnav" href="/photogallery" >
-                            <span>Photo Gallery</span>
-                        </a>
-                    </li>
-                    <li>
-                        <%if(user === null){%>
                         <a class="topnav" href="/login" >
                             <span>Login</span>
                         </a>
+                    </li>
                         <%}else{%>
+                    <li>
                         <a class="topnav" href="/login/logout" >
                             <span>Logout</span>
                         </a>
-                        <%}%>
                     </li>
                     <li>
-                        <a class="topnav" href="/" >
-                            <span>Urgently call customers to find a builders</span>
+                        <a class="topnav" href="/<%= user.role %>s/profile/<%=user.id %>" >
+                            <span>My profile</span>
                         </a>
                     </li>
+                        <%}%>
+
                 </ul>
             </div>
  </nav>
