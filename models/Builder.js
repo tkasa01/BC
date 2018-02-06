@@ -23,7 +23,19 @@ var BuilderSchema = new mongoose.Schema({
     role:{
         type: String,
         default: "builder"
-    }
+    },
+    reviews:[
+        {
+            title: String,
+            body: String,
+            rating: Number,
+            created: {
+                type: Date,
+                default: Date.now
+            },
+            author_id: String
+        }
+    ]
 });
 
 //this middleware is encrypt the passwprd before the save it in the database
