@@ -25,5 +25,7 @@ router.post('/update/:id', builders.update);
 
 router.post('/delete/:id', builders.delete);
 
+router.post('/postReview/:id', builders.postReview);
+
 module.exports = router;
 
