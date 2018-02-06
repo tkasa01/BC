@@ -13,7 +13,7 @@ builderController.list = function(req, res) {
             res.send(err);
         } else {
             res.render('../views/builders/list', {
-                pageTitle: 'List of Builders' ,
+                pageTitle: 'List of Builders',
                 builders: builders,
                 user: req.user
             });
@@ -23,24 +23,38 @@ builderController.list = function(req, res) {
 
 builderController.displayPage = function(req, res){
     res.render('builders/display', {
-        pageTitle: 'Found by name',
-        user: req.user
-    });
+                    pageTitle: 'Found by name',
+                    user: req.user
+                });
 };
 
 builderController.findByName = function(req, res){
-     Builder.find({'firstname': req.body.firstname} && {'lastname':req.body.lastname} && {'position': req.body.position}).exec(function (err, builder ) {
+
+    Builder.find( {$and:[{firstname : req.body.firstname, lastname :req.body.lastname }]},function(err,builders){
+        if(err || !builders){
+            global.errors =['Not found'];
+            res.send('non found');
+        }else{
+            res.render('../views/builders/show',{
+                builder:builders,
+                user: req.user
+            });
+        }
+    });
+
+    /*
+     Builder.find({'firstname': req.body.firstname} || {'lastname':req.body.lastname }||{'position': req.body.position}).exec(function (err, builder ) {
         if(err || !builder){
             global.errors =['Not found'];
             res.send('non found');
         }else{
             res.render('../views/builders/show',{
-
                 builder:builder,
                 user: req.user
             });
         }
     });
+    */
 };
 
 //shows single
@@ -62,7 +76,7 @@ builderController.show = function(req, res){
                 pageTitle: 'Builder\'s a home page',
                 user: req.user,
                 builder: builder,
-               // owner: req.params.id === req.user.user.id ? true : false,
+              //  owner: req.params.id === req.user.user.id ? true : false,
                 reviews: null //
                  });
         }
@@ -159,15 +173,22 @@ builderController.update = function(req, res){
      });
  };
 
+builderController.me = function(req, res){
+    res.json(req.user.toJson());
+};
 
+builderController.postReview = function (req, res) {
+    var review = req.body;
+    Builder.findById(req.params.id, function(err, builder){
+        if(builder){
+            builder.reviews.push(review);
+            builder.save()
+        }
+    })
+};
  module.exports = builderController;
 
 
-/*
-* personSchema.virtual('fullName').get(function () {
- return this.name.first + ' ' + this.name.last;
- });
-* */
 
 
 
