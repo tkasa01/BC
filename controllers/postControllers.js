@@ -4,6 +4,7 @@
 var mongoose = require('mongoose');
 var Post = require('../models/Post');
 var Customer = require('../models/Customer');
+var async = require('async');
 
 var postController = {};
 
@@ -12,32 +13,56 @@ postController.list = function (req, res, next) {
         if(err){
             res.send(err);
         }else{
-            res.render('./posts/posts', {
-                pageTitle: 'Recent posts from customers',
-                posts:posts,
-                user: req.user
+            var list = [];
+            async.forEach(posts,function(post,callback){
+                if(post.author_id){
+                    Customer.findById(post.author_id,function(err,customer){
+                        console.log(customer)
+                        list.push({
+                            post: post,
+                            author: customer
+                        });
+                        callback();
+                    })
+                }else{
+                    callback();
+                }
+            },function(err){
+                if(err) res.send(err);
+                res.render('./posts/posts', {
+                    pageTitle: 'Recent posts from customers',
+                    posts:  list,
+                    user: req.user
+                });
             });
+
+
         }
     }
     );
 };
 
 postController.savePost = function(req, res, next) {
-    //var postSorted = post.object('Post').sorted('timestamp', true);
-    var post = new Post({_id: new mongoose.Types.ObjectId(),
-                             title:req.body.title,
-                            content: req.body.content,
-                            author:req.body.author
-                            });
-    console.log(post);
-    post.save(function (err, post) {
-        if (err) {
-            res.send(err);
-        } else {
-               // console.log("saved" + post);
+
+    if(req.user){
+        console.log(req.user.id)
+        var post = new Post({
+            title:req.body.title,
+            content: req.body.content,
+            author_id: req.user.id
+        });
+        post.save(function (err, post) {
+            if (err) {
+                res.send(err);
+            } else {
+                // console.log("saved" + post);
                 res.redirect('/posts/posts');
             }
         });
+    }else{
+        res.send('You are not logged in');
+    }
+
 };
 
 /*
