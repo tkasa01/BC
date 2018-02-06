@@ -3,7 +3,7 @@
  */
 module.exports= {
     secret: 'lots of power in one action',
-    expTime: 840000
+    expTime: 10080 // in seconds
     };
 
 
