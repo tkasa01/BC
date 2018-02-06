@@ -8,19 +8,7 @@
         <% include ../template/header.ejs %>
     </header>
         <h1><%- pageTitle %></h1>
-        <div class="post">
-
-                <body>
-                <h2>Recent posts from customers</h2>
-                    <form action="/customers/profile" metod="post">
-                        <td>Title
-                            <input type="text" name="title" /><br/>
-                            <textarea name="content" cols="50" rows="5" charswidth="23"></textarea></br>
-                            <button type="submit">Submit</button>
-                        </td>
-                    </form>
-                </body>
-        </div>
+    <a href="posts/write">Write a post to find a builder</a>
         <div class="container">
             <h2> Hello  <%= customer.firstname%></h2>
             <table class="list-table">
