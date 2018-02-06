@@ -8,15 +8,16 @@
     <% include ../template/header.ejs %>
 </header>
 <h1><%- pageTitle %></h1>
-    <div class="list-post" float="right" >
+   <div class="list-post" float="right" >
         <% for(let i=0; i<posts.length; i++) {%>
-        <h3><%=posts[i].title %></h3>
-        <p><%= posts[i].content %></p>
-        <h5><%= posts[i].author %></h5>
-        <h5><%= posts[i].firstname %></h5>
-        <h6><%= posts[i].timestamp %></h6>
+            <a href="/customers/profile/<%=posts[i].author.id%>"><h2><%=posts[i].author.firstname + ' ' + posts[i].author.lastname %></h2></a>
+            <h3><%=posts[i].post.title %></h3>
+            <p><%=posts[i].post.content %></p>
+            <h5><%=posts[i].post.author %></h5>
+            <h6><%=posts[i].post.timeStamp %></h6>
         <% } %>
     </div>
+
 <footer>
     <% include ../template/footer.ejs %>
 </footer>
