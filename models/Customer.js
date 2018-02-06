@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
 var CustomerSchema = new mongoose.Schema({
+    _id:mongoose.Schema.Types.ObjectId,
     title: {type:String},
     firstname: {type:String,required: true},
     lastname:{type: String,required: true},
@@ -25,10 +26,8 @@ var CustomerSchema = new mongoose.Schema({
         type: String,
         default: "customer"
     }
-    /*
-    post: [{ref:'post',    //inverse association of denormalisation data
-            type: mongoose.Schema.Types.ObjectId
-           }]*/
+
+
 });
 
 CustomerSchema.pre('save', function (next) {
@@ -52,3 +51,4 @@ CustomerSchema.methods = {
 };
 
 var Customer = module.exports = mongoose.model('Customer', CustomerSchema);
+
