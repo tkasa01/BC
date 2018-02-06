@@ -2,63 +2,52 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PostSchema = new Schema({
-    title:{
-        type:String,
-        required: true,
-        unique: true
-    },
-    content: {
+    //_id: mongoose.Schema.Types.ObjectId,
+    title:{ type:String, required: true},
+    content: {type: String, required: true},
+    author_id:{
         type:String,
         required: true
-       },
-    timestamp:{
-        type: Date
     },
-    update:{
-        type: Date,
-        default: Date.now()
-    },
-    author:{
-            type: Schema.Types.ObjectId,
-            ref: "Customer",
+    timestamp: {type: Date},
+    update: {type: Date, default: Date.now()}
 
-            required: function () {
-                return this.ref != null;
-            }
-    }
-
+});
     /*,
-    author:{
-        type: Schema.Types.ObjectId,
-        ref: 'Customer',  //from customer collection
-        required: function () {
-            return this.ref != null;
-        }
-
-    })
-
-    builder:{
+   builder:{
         type: String,
         default: null //if !null then its a review
     },
-    review:{
+    review:[{
         title: String,
         description: String,
-        rating: Number
+        rating: Number,
+        created: {
+        type: Date,
+        default: Date.now
+        }]
     }*/
-});
+
 
 
 
 //this middleware make sure that this post is created from this author
 
 PostSchema.pre('save', function (next) {
-    this.content  = Post(this.author); //slygify in the video
+    author  = Post(this.author); //slygify in the video
     next();
 });
 
 PostSchema.pre('validate', function(next){
     if(!this.author)
+    next();
+});
+
+PostSchema.pre('save', function(next){// added updated date
+    var currentDate = new Date();
+    this.updated_at = currentDate;
+    if(!this.updated_at)
+        this.updated_at = currentDate;
     next();
 });
 
