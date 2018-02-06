@@ -11,8 +11,8 @@ var validator = require('validator');
 var _ = require('lodash');
 
 //var flash = require('connect-flash');
-var api = require('./api/router');
 require('./middlewareApp')(app);
+var api = require('./api/router');
 
 
 mongoose.Promise = global.Promise;
