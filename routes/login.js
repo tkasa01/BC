@@ -4,7 +4,7 @@
 var express = require('express');
 var router = express.Router();
 var login = require('../controllers/login');
-
+var builders = require('../controllers/buildersControllers');
 router.use(function (req,res,next) {
     if(req.session && typeof req.session.user !== 'undefined')
         res.redirect('/');
@@ -26,16 +26,20 @@ router.get('/', function(req, res ){
 });
 
 //post login page before login
-router.post('/', login.login);
+router.post('/', login.login, builders.show );
 
-router.get('/profile/:id', function(req, res){
+router.get('/profile/:id', isLoggedIn, builders.show , function(req, res){
     res.render('profile',{user: req.user});
 });
 
 
 router.get('/logout',login.logout);
 
-
+function isLoggedIn(req, res, next){
+    if(req.login())
+        return next();
+    res.redirect('/');
+}
 
 
 module.exports = router;
