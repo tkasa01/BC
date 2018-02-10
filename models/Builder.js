@@ -1,8 +1,8 @@
 /** created by tkasa 19/12/2017. ...*/
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
-
-var BuilderSchema = new mongoose.Schema({
+var Schema = mongoose.Schema;
+var BuilderSchema = new Schema({
     title: {type:String},
     firstname: {type:String, require: true},
     lastname:{type: String, require: true},
@@ -24,16 +24,12 @@ var BuilderSchema = new mongoose.Schema({
         type: String,
         default: "builder"
     },
-    reviews:[
+
+    review:[
         {
-            title: String,
-            body: String,
-            rating: Number,
-            created: {
-                type: Date,
-                default: Date.now
-            },
-            author_id: String
+            author_id: {type: Schema.Types.ObjectId,
+                ref: 'Customer'
+            }
         }
     ]
 });
