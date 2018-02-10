@@ -3,9 +3,9 @@
  */
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
-
-var CustomerSchema = new mongoose.Schema({
-    _id:mongoose.Schema.Types.ObjectId,
+var Schema = mongoose.Schema;
+var CustomerSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     title: {type:String},
     firstname: {type:String,required: true},
     lastname:{type: String,required: true},
@@ -25,8 +25,19 @@ var CustomerSchema = new mongoose.Schema({
     role:{
         type: String,
         default: "customer"
-    }
+    },
 
+    builder: {
+        type: Schema.Types.ObjectId,
+        ref: 'builder'
+    },
+    review:[
+        {
+            author_id: {type: Schema.Types.ObjectId,
+                ref: 'Customer'
+            }
+        }
+    ]
 
 });
 
