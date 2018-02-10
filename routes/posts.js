@@ -4,16 +4,22 @@
 var express = require('express');
 var postRouter = express.Router();
 var posts = require('../controllers/postControllers');
+var customers = require('../controllers/customersControllers');
 
-
-postRouter.post('/posts',  posts.savePost,function (req, res) {
-    console.log('kuu');
-    res.send('POST request to the homepage');
-});
-
-
+postRouter.post('/posts',  posts.savePost);
 
 postRouter.get('/posts', posts.list);
+
+postRouter.get('/postReview',  function (req, res, next) {
+    var id = req.params.id;
+    res.redirect(req.params.id + 'postReview');
+ ;
+    next();
+});
+
+postRouter.post('/customers/profile/:id/postReview', posts.saveReview);
+
+
 
 
 /*
