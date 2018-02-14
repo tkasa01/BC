@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Builder = require('../models/Builder');
+//var Review = require('../models/Post');
 var validation = require('./handlers/validation');
 var builderController = {};
 
@@ -77,7 +78,7 @@ builderController.show = function(req, res){
                 user: req.user,
                 builder: builder,
               //  owner: req.params.id === req.user.user.id ? true : false,
-                reviews: null //
+                reviews: req.review
                  });
         }
 });
@@ -173,19 +174,33 @@ builderController.update = function(req, res){
      });
  };
 
-builderController.me = function(req, res){
-    res.json(req.user.toJson());
-};
 
+/*
 builderController.postReview = function (req, res) {
     var review = req.body;
     Builder.findById(req.params.id, function(err, builder){
         if(builder){
             builder.reviews.push(review);
             builder.save()
+        }else{
+            res.send(err);
         }
     })
 };
+builderController.displayPost = function(req, res){
+    Builder.findOne({_id: req.params.id}).exec(function (err, builder) {
+        if (err) {
+            console.log("Error:", err);
+            res.status(400).send("builder doesn't exist");
+        }else {
+            res.render("../views/builders/profile", {
+                builder: builder,
+                user: req.user,
+                pageTitle:'Builder edit page'});
+        }
+    });
+};
+*/
  module.exports = builderController;
 
 
