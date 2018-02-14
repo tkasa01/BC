@@ -21,17 +21,18 @@ var BuilderSchema = new Schema({
         default: Date.now
     },
     role:{
-        type: String,
-        default: "builder"
-    },
+            type: String,
+            default: "builder"
+        },
 
     review:[
         {
-            author_id: {type: Schema.Types.ObjectId,
-                ref: 'Customer'
-            }
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
         }
+
     ]
+
 });
 
 //this middleware is encrypt the passwprd before the save it in the database
