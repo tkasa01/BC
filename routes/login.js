@@ -5,6 +5,7 @@ var express = require('express');
 var router = express.Router();
 var login = require('../controllers/login');
 var builders = require('../controllers/buildersControllers');
+
 router.use(function (req,res,next) {
     if(req.session && typeof req.session.user !== 'undefined')
         res.redirect('/');
