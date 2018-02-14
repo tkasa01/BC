@@ -4,10 +4,10 @@ var Schema = mongoose.Schema;
 var PostSchema = new Schema({
     title:{ type:String, required: true},
     content: {type: String, required: true},
-    author_id:[{
+    author_id:{
         type:Schema.Types.ObjectId,
         ref: 'Customer'
-    }],
+    },
    // author_id:{
    //     type:String,
    //     required: true
@@ -16,30 +16,6 @@ var PostSchema = new Schema({
     update: {type: Date, default: Date.now()}
 
 });
-
-var ReviewSchema = new Schema({
-         builder:{
-             type: Schema.Types.ObjectId, //String,
-             ref: 'Builder',
-             default: null //if !null then its a review
-         },
-
-        author_id:{type:Schema.Types.ObjectId,
-             ref:'Customer'
-        },
-         review:[{
-             title: String,
-             description: String,
-             rating: Number,
-             created: {
-                     type: Date,
-                     default: Date.now
-              }
-          }]
-
-});
-
-
 
 
 //this middleware make sure that this post is created from this author
@@ -72,4 +48,3 @@ function post(text){
 
 var Post = module.exports = mongoose.model('Post', PostSchema);
 
-var Review = module.exports = mongoose.model('Review', ReviewSchema);
