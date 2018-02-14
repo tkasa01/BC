@@ -29,15 +29,9 @@ var CustomerSchema = new Schema({
 
     builder: {
         type: Schema.Types.ObjectId,
-        ref: 'builder'
+        ref: 'Builder'
     },
-    review:[
-        {
-            author_id: {type: Schema.Types.ObjectId,
-                ref: 'Customer'
-            }
-        }
-    ]
+    review:[{type: Schema.Types.ObjectId, ref: 'Review'}]
 
 });
 
