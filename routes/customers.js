@@ -4,7 +4,7 @@
 var express = require('express');
 var router = express.Router();
 var customers = require('../controllers/customersControllers');
-var post = require('../controllers/postControllers');
+//var post = require('../controllers/postControllers');
 var Post = require('../models/Post');
 
 
@@ -36,7 +36,7 @@ router.post('/update/:id', customers.update);
 router.post('/delete/:id', customers.delete);
 
 //Profile page
-router.get('/profile/:id',customers.profile);
+//router.get('/profile/:id',customers.profile);
 
 router.get('/profile/posts/write', function (req, res) {
     console.log('create function');
