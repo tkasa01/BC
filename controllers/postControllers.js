@@ -4,13 +4,13 @@
 
 var mongoose = require('mongoose');
 var Post = require('../models/Post');
-var Review = require('../models/Post');
+var Review = require('../models/Review');
 var Customer = require('../models/Customer');
 var async = require('async');
 
 var postController = {};
 
-postController.list = function (req, res, next) {
+postController.list = function (req, res) {
     Post.find({}).populate('author').exec(function (err, posts) {
             if(err){
                 res.send(err);
@@ -31,8 +31,8 @@ postController.list = function (req, res, next) {
                     }
                 },function(err){
                     if(err) res.send(err);
-                   // var dob = req.dob.toISOString();
-                   // dob = dob.substring(0, dob.indexOf('T'));
+                    // var dob = req.dob.toISOString();
+                    // dob = dob.substring(0, dob.indexOf('T'));
                     res.render('./posts/posts', {
                         pageTitle: 'Recent posts from customers',
                         posts:  list,
@@ -44,7 +44,7 @@ postController.list = function (req, res, next) {
     );
 };
 
-postController.savePost = function(req, res, next) {
+postController.savePost = function(req, res) {
 
     if(req.user){
         //console.log(req.user.id);
@@ -100,22 +100,22 @@ postController.params = function(req, res, next, id){
 postController.saveReview = function(req, res, next) {
     if(req.user){
         console.log(req.user.id);
-        var review = new Review({
-            title:req.body.title,
-            description: req.body.description,
+        var reviews = new Review({
+            review: req.body,
             rating: req.body.rating,
-            author: author._id,
-            created:req.body.created,
-            builder : req.builder
-           // author_id: req.user.id
+            description: req.body.description,
+            author_id: req.user.id, //assign the _id from user
+            builder_id : req.params.id,
+            created:req.body.created
         });
-        console.log(review);
-        review.save(function (err, reviews) {
+        console.log(reviews);
+        reviews.save(function (err, reviews) {
             if (err) {
                 res.send(err);
             } else {
                 console.log("saved" + reviews);
-                res.redirect('/post/postReview' + req.params.id);
+                res.redirect('/builders/profile/' + req.params.id);
+              // res.redirect('/post/postReview/' + req.params.id);
             }
         });
     }else{
@@ -123,8 +123,63 @@ postController.saveReview = function(req, res, next) {
     }
 
 };
+postController.listReviews = function (req, res) {
+    Review.find({}).exec(function (err, reviews) {
+        console.log(reviews);
+        if (err) {
+            res.send(err);
+        } else {
+            res.render('./builders/profile/:id', {
+                reviews: reviews,
+                user: req.user
+            });
+        }
+    })
+};
+/*
+postController.listReviews = function (req, res, next) {
+    var array = [];
+    Review.find({}).exec(function (err, reviews) {
 
+            if(err) {
+                res.send(err);
+            }
+            if(reviews === null)
+                 return [];
+            else{
+                console.log(reviews);
+                async.forEach(array,function(review, callback){
+                   if(review.author_id){
+                        Customer.findById(review.author_id,function(err,customer){
+                            //console.log(customer);
+                            array.push({
+                                review : review,
+                                author: customer,
+                                rating: review.rating,
+                                description:review.description});
+                            console.log(array);
+                            callback();
 
+                        })
+                    }else{
+                        callback();
+                    }
+                },function(err){
+                    if(err) res.send(err);
+                    // var dob = req.dob.toISOString();
+                    // dob = dob.substring(0, dob.indexOf('T'));
+
+                    res.render('./builders/profile/:id', {
+                        review: array,
+                        user: req.user
+                    });
+                    console.log(review);
+                });
+            }
+        }
+    );
+};
+*/
 /*
  Post.findById(author).populate('author').exec(function (err, author) {
  if (err) {
@@ -180,6 +235,7 @@ postController.deletePost = function (req, res, next) {
 */
 
 module.exports = postController;
+
 
 
 
