@@ -34,7 +34,7 @@ postController.list = function (req, res) {
                 res.send(err);
             }else{
                 var list = [];
-                async.forEach(posts,function(post,callback){
+                async.forEach(posts, function(post, callback){
                     if(post.author_id){
                         Customer.findById(post.author_id,function(err,customer){
                             //console.log(customer);
@@ -87,31 +87,34 @@ postController.savePost = function(req, res) {
 
 postController.checkOwner = function(req, res, next){
     if(req.user){
-        console.log('user id checkOwner func ' + req.user.id);
         var idUser = req.user.id;
         var postId = req.params.id;
-        console.log('user id  checkOwner '+ idUser);
-        console.log('post id ' + postId);
+                console.log('user id  checkOwner '+ idUser);
+                console.log('post id ' + postId);
+        Post.findById(postId, function (err, post) {
+            if (post.author_id) {
+                Customer.findById(post.author_id, function (err, customer) {
+                    console.log(customer);
+                    if (idUser === customer) {
+                        next();
+                    } else {
+                        res.send(err);
+                    }
+                })
+            }
+        })
     }
 };
 //delete
 postController.delete = function(req, res, post) {
-   // if(post.author_id) {
-             Post.remove({_id: req.params.id}, function (err) {
-                 if (err) {
-                     console.log(err);
-                 }
-                 else {
-                     console.log("post deleted!");
-                     res.redirect("/posts/posts");
-                 }
-             });
-
-       //  }else{
-            // res.send('you are not logged in');
-            // res.redirect('/login');
-        // }
-
+       Post.remove({_id: req.params.id}, function (err) {
+            if (err) {
+                res.send(err);
+            }else{
+                console.log("post deleted!");
+                res.redirect('/posts/posts');
+            }
+       });
 };
 
 //====================== REVIEWS =================================
