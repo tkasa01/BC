@@ -10,6 +10,24 @@ var async = require('async');
 
 var postController = {};
 
+postController.params = function(req, res, next, id){
+    console.log('post id params func ' + id);
+    Post.findById(id).then(function(post){
+        console.log('post id' + id);
+        if(!post){
+            next(new Error('No post found from this id'));
+        }else{
+            req.body.post = post;
+           // post.title = req.body.title;
+           // post.content = req.body.content;
+          //  post.author = req.body.author;
+            next();
+        }
+    },function(err){
+        next(err);
+    })
+};
+
 postController.list = function (req, res) {
     Post.find({}).populate('author').exec(function (err, posts) {
             if(err){
@@ -31,8 +49,8 @@ postController.list = function (req, res) {
                     }
                 },function(err){
                     if(err) res.send(err);
-                    // var dob = req.dob.toISOString();
-                    // dob = dob.substring(0, dob.indexOf('T'));
+                   // var dob = req.dob.toISOString();
+                   //     dob = dob.substring(0, dob.indexOf('T'));
                     res.render('./posts/posts', {
                         pageTitle: 'Recent posts from customers',
                         posts:  list,
@@ -45,9 +63,8 @@ postController.list = function (req, res) {
 };
 
 postController.savePost = function(req, res) {
-
     if(req.user){
-        //console.log(req.user.id);
+        //console.log('user id ' + req.user.id);
         var post = new Post({
             title:req.body.title,
             content: req.body.content,
@@ -62,38 +79,39 @@ postController.savePost = function(req, res) {
             }
         });
     }else{
-        res.send('You are not logged in');
+        res.redirect('/login');
+       // res.send('You are not logged in');
     }
 
 };
 
-/*
- Post.findById(author).populate('author').exec(function (err, author) {
- if (err) {
- res.send(err);
- }
- else {
- // console.log("saved" + post);
- res.redirect('/posts/posts' + author);
- }
- });
- */
+postController.checkOwner = function(req, res, next){
+    if(req.user){
+        console.log('user id checkOwner func ' + req.user.id);
+        var idUser = req.user.id;
+        var postId = req.params.id;
+        console.log('user id  checkOwner '+ idUser);
+        console.log('post id ' + postId);
+    }
+};
+//delete
+postController.delete = function(req, res, post) {
+   // if(post.author_id) {
+             Post.remove({_id: req.params.id}, function (err) {
+                 if (err) {
+                     console.log(err);
+                 }
+                 else {
+                     console.log("post deleted!");
+                     res.redirect("/posts/posts");
+                 }
+             });
 
+       //  }else{
+            // res.send('you are not logged in');
+            // res.redirect('/login');
+        // }
 
-postController.params = function(req, res, next, id){
-    Post.findById(id).populate('author', 'email').exec().then(function(err, post){
-        if(!post){
-            next(new Error('No post found from this id'));
-        }else{
-            post.title = req.body.title;
-            post.content = req.body.content;
-            post.author = req.body.author;
-            req.post = post;
-            next();
-        }
-    },function(err){
-        next(err);
-    })
 };
 
 //====================== REVIEWS =================================
@@ -114,8 +132,8 @@ postController.saveReview = function(req, res, next) {
                 res.send(err);
             } else {
                 console.log("saved" + reviews);
-                res.redirect('/builders/profile/' + req.params.id);
-              // res.redirect('/post/postReview/' + req.params.id);
+               // res.redirect('/builders/profile/' + req.params.id);
+               res.redirect('/posts/reviews/' + req.params.id);
             }
         });
     }else{
@@ -124,18 +142,23 @@ postController.saveReview = function(req, res, next) {
 
 };
 postController.listReviews = function (req, res) {
-    Review.find({}).exec(function (err, reviews) {
+    Review.find({}).populate('author').exec(function (err, reviews) {
         console.log(reviews);
         if (err) {
             res.send(err);
         } else {
-            res.render('./builders/profile/:id', {
+            res.render('../views/posts/reviews/'+ req.params.id, {
+                author_id: req.author_id,
+                builder_id: req.builder_id,
                 reviews: reviews,
                 user: req.user
             });
         }
     })
 };
+
+
+
 /*
 postController.listReviews = function (req, res, next) {
     var array = [];
