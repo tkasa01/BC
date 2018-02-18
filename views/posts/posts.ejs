@@ -17,7 +17,7 @@
                 <p><%=posts[i].post.content %></p>
                 <p><%=posts[i].post.update %></p>
 
-           <a href="mailto:<%=posts[i].author.email%>"><p><%=posts[i].author.email%></p></a>
+                 <a href="mailto:<%=posts[i].author.email%>"><p><%=posts[i].author.email%></p></a>
         <% } else {%>
        <a href="/customers/profile/<%=posts[i].author.id%>"><h2>
        <%=posts[i].author.firstname + ' ' + posts[i].author.lastname %></h2></a>
@@ -26,7 +26,8 @@
        <p><%=posts[i].post.update %></p>
 
        <a href="mailto:<%=posts[i].author.email%>"><p><%=posts[i].author.email%></p></a>
-               <form action="/posts/delete/<%= posts[i].post._id%>" method="post">
+
+               <form action="/posts/postReview/delete/<%= posts[i].post._id%>" method="post">
                    <h3><button type="submit" value="delete" onclick="<%-" deleteConfirm()" %>">DELETE</button></h3>
                </form>
                <script type="text/javascript">
