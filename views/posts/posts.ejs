@@ -10,13 +10,35 @@
 <h1><%- pageTitle %></h1>
    <div class="list-post" float="right" >
         <% for(let i = 0; i < posts.length; i++) {%>
-            <a href="/customers/profile/<%=posts[i].author.id%>"><h2><%=posts[i].author.firstname + ' ' + posts[i].author.lastname %></h2></a>
-            <h3><%=posts[i].post.title %></h3>
-            <p><%=posts[i].post.content %></p>
-            <p><%=posts[i].post.update %></p>
+            <a href="/customers/profile/<%=posts[i].author.id%>"><h2>
+        <% if(typeof user !== 'undefined' && user){ %>
+                <%=posts[i].author.firstname + ' ' + posts[i].author.lastname %></h2></a>
+                <h3><%=posts[i].post.title %></h3>
+                <p><%=posts[i].post.content %></p>
+                <p><%=posts[i].post.update %></p>
+
+           <a href="mailto:<%=posts[i].author.email%>"><p><%=posts[i].author.email%></p></a>
+        <% } else {%>
+       <a href="/customers/profile/<%=posts[i].author.id%>"><h2>
+       <%=posts[i].author.firstname + ' ' + posts[i].author.lastname %></h2></a>
+       <h3><%=posts[i].post.title %></h3>
+       <p><%=posts[i].post.content %></p>
+       <p><%=posts[i].post.update %></p>
+
        <a href="mailto:<%=posts[i].author.email%>"><p><%=posts[i].author.email%></p></a>
-        <% } %>
+               <form action="/posts/delete/<%= posts[i].post._id%>" method="post">
+                   <h3><button type="submit" value="delete" onclick="<%-" deleteConfirm()" %>">DELETE</button></h3>
+               </form>
+               <script type="text/javascript">
+                   function deleteConfirm() {
+                       return confirm ("Do you want to delete this post?")
+                   }
+               </script>
+       <%}%>
+           <hr>
+       <% } %>
     </div>
+
 <footer>
     <% include ../template/footer.ejs %>
 </footer>
