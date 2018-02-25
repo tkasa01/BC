@@ -1,7 +1,7 @@
 /**
  * Created by tkasa on 08/01/2018.
  */
-
+/*
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/Builder'),
@@ -43,3 +43,4 @@ module.exports = function (app) {
     ))
 };
 
+*/
