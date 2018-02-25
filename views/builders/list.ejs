@@ -9,15 +9,12 @@
 </header>
 <div class="container">
     <h1><%= pageTitle %></h1>
-        <h2>Builders Detail</h2>
         <% if(builders.length > 0) { %>
             <table class="list-table">
-                <thead>
                     <tr>
                         <th>Builder Name</th>
                         <th>Position</th>
                     </tr>
-                </thead>
                 <% for(var i=0; i<builders.length; i++) { %>
                         <tr>
                             <td><a href="/builders/profile/<%= builders[i]._id%>">

@@ -7,9 +7,9 @@
     <header>
         <% include ../template/header.ejs %>
     </header>
+    <div class="container">
         <h1><%- pageTitle %></h1>
-    <a href="posts/write">Write a post to find a builder</a>
-        <div class="container">
+        <% include ../template/messages.ejs %>
             <h2> Hello  <%= customer.firstname%></h2>
             <table class="list-table">
                 <tbody>
@@ -49,24 +49,12 @@
             <form action="/customers/delete/<%= customer._id%>" method="post">
                 <h3><button type="submit">DELETE</button></h3>
             </form>
-                <h1><a href="/builders/list">Write a review </a></h1>
-
-            <div class="review">
-                <form action="/posts/postReview" method="post">
-                    <td>Builder's name</td>
-                    <td>:</td>
-                    <input type="text" name="title" /><br/>
-                    <textarea name="description" cols="70" rows="5" charswidth="3" placeholder="...write a review about a builder"></textarea>
-                    <label class="radio-inline"><input type="radio" name="review" value="1">1</label>
-                    <label class="radio-inline"><input type="radio" name="review" value="2">2</label>
-                    <label class="radio-inline"><input type="radio" name="review" value="3">3</label>
-                    <label class="radio-inline"><input type="radio" name="review" value="4">4</label>
-                    <label class="radio-inline"><input type="radio" name="review" value="5">5</label>
-                    <td colspan="2"><button type="submit">Send</button></td>
-                </form>
-            </div>
-
+        <div class="write">
+            <a href="posts/write"><button>Post</button></a>
+            <a href="/builders/list"><button>Review</button></a>
         </div>
+        </div>
+
     <footer>
         <% include ../template/footer.ejs %>
     </footer>

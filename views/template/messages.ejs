@@ -1,5 +1,5 @@
-<ul class="messages">
-    <%if(errors !==null && typeof errors !== 'undefined'){
+<ul class="errors">
+    <%if(errors !== null && typeof errors !== 'undefined'){
     for(var i = 0; i < errors.length; i++){%>
     <li>
         <%if(errors[i]){%>
@@ -8,4 +8,13 @@
     </li>
     <%}
     }%>
+</ul>
+<ul class="messages">
+    <%  if (messages !==null && typeof messages !== 'undefined' ){ %>
+            <li>
+                <%if(messages[i]){%>
+                    <p> <%=messages[i] %></p>
+                <%}%>
+            </li>
+    <%}%>
 </ul>

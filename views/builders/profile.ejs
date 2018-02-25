@@ -7,11 +7,12 @@
 <header>
     <% include ../template/header.ejs %>
 </header>
-   <h1><%= pageTitle %></h1>
-   <div class="container">
-       <h2> Hello  <%= builder.firstname%></h2>
-       <p><%= builderMessage %></p>
-    <table class="list-table">
+<div class="container-profile">
+    <article>
+        <h1><%= pageTitle %></h1>
+            <% include ../template/messages.ejs %>
+            <h2> Hello  <%= builder.firstname%></h2>
+        <table class="list-table">
             <tbody>
             <tr>
                 <td>First name</td>
@@ -34,40 +35,62 @@
                 <td><%= builder.education%></td>
             </tr>
             </tbody>
-    </table>
-       <p>Upload the images:</p>
-       <div>
-           <label>Profile Image:</label>
-           <input type="file" name="img">
-       </div>
-       <h3><a href="/builders/edit/<%= builder._id%>">EDIT</a></h3>
-       <form action="/builders/delete/<%= builder._id%>" method="post">
-        <button type="submit">DELETE</button>
-       </form>
-       <div class="review">
-           <h1>Please leave a review about me and my work:</h1>
-           <form action="/posts/postReview/<%= builder._id%>" method="post">
-               <label class="radio-inline"><input type="radio" name="rating" value="1">1</label>
-               <label class="radio-inline"><input type="radio" name="rating" value="2">2</label>
-               <label class="radio-inline"><input type="radio" name="rating" value="3">3</label>
-               <label class="radio-inline"><input type="radio" name="rating" value="4">4</label>
-               <label class="radio-inline"><input type="radio" name="rating" value="5">5</label>
-               <p>Add a couple of words about the builder and work what he has done for you</p>
-               <textarea name="description" cols="70" rows="5" charswidth="3" placeholder="...write a review about a builder"></textarea>
+        </table>
 
-               <td colspan="2"><button type="submit">Send</button></td>
-           </form>
-       </div>
-            <h1>All customers reviews:</h1>
-       <% for(var i = 0; i < reviews.length; i++) {%>
-       <p><%=reviews[i].review.content %></p>
-       <p><%=reviews[i].review.update %></p>
-       <% } %>
+        <form method="post" action="/builders/profile/<%= builder._id%>" enctype="multipart/form-data">
+            <div class="images-upload">
+                    <h2>Upload the images:</h2>
+                    <div class="brows">
+                        <label for="title">Image: </label>
+                        <input type="file" name="img">
+                    </div>
+                    <div class="brows" cols="54" rows="50" >
+                        <label>Category:</label>
+                        <select>
+                            <option><a href="">Bathrooms</a></option>
+                            <option><a href="">Electricity</a></option>
+                            <option><a href="">Paining lob</a></option>
+                            <option><a href="">Carpenter</a></option>
+                        </select>
+                    </div>
+                    <div id="upload-button">
+                       <input type="submit" name="submit" value="upload image">
+                    </div>
+            </div>
+        </form>
+        <h3><a href="/builders/edit/<%= builder._id%>">EDIT</a></h3>
+        <form action="/builders/delete/<%= builder._id%>" method="post">
+            <button type="submit" onclick="<%-" deleteConfirm()" %>">DELETE</button>
+        </form>
+        <script type="text/javascript" color="red">
+            function deleteConfirm() {
+                return confirm ("Do you want to delete your account?")
+            }
+        </script>
+    </article>
+    <!------------------------------------------------------------------------------------->
+    <div class="review">
+        <table>
+            <h1>Please leave a review about me and my work:</h1>
+            <form action="/posts/postReview/<%= builder._id%>" method="post">
+                <label class="radio-inline"><input type="radio" name="rating" value="1">1</label>
+                <label class="radio-inline"><input type="radio" name="rating" value="2">2</label>
+                <label class="radio-inline"><input type="radio" name="rating" value="3">3</label>
+                <label class="radio-inline"><input type="radio" name="rating" value="4">4</label>
+                <label class="radio-inline"><input type="radio" name="rating" value="5">5</label>
+                <p>Add a couple of words about the builder and work what he/she has been done for you in the box below:</p>
+                <textarea name="description" cols="54" rows="5" charswidth="3" placeholder="...write a review about a builder"></textarea>
+                <button type="submit" >Send</button>
+            </form>
+        </table>
+    </div>
+    <!--------------------------------------------------------------------------------->
 
-</div>
 
 <footer>
     <% include ../template/footer.ejs %>
 </footer>
+</div>
 </body>
+
 </html>

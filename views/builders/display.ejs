@@ -4,11 +4,13 @@
     <% include ../template/head.ejs %>
 </head>
 <body>
+<header>
+    <% include ../template/header.ejs %>
+</header>
 <div class="container">
     <h1>Please insert builder's details</h1>
-    <form action="/builders/show" method="post">
-
         <table class="list-table">
+            <form action="/builders/show" method="post">
             <tr>
                 <td>First Name</td>
                 <td><input type="text" name="firstname" /></td>
@@ -24,8 +26,9 @@
             <tr>
                 <td colspan="2"><button>Find</button></td>
             </tr>
+            </form>
         </table>
-    </form>
+
 </div>
 <footer>
     <% include ../template/footer.ejs %>

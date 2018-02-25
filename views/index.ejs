@@ -7,17 +7,34 @@
       <header>
           <% include template/header.ejs %>
       </header>
+      <img class="home-page" src="http://localhost:3000/images/work-1.jpg">
+      <div id="image-place">
+          <h3>Home renovation and construction service</h3>
           <h1><%- pageTitle %></h1>
-            <h4><a href="/customers">Customers</a></h4>
-
-                <div class="jumbotron">
-                  <p>Welcome to templating using EJS</p>
-                </div>
-                <div class="col-sm-4">
-                  <h3>Look I'm A Sidebar!</h3>
-                </div>
+          <div id="about-company">
+          <h4>Welcome to Building Company:</h4>
+          <p>
+              It can be tricky finding a highly qualified team of builders whom you can trust. Builder Company Website was created to solve this very problem!
+              Builders with appropriate qualifications offer their services with our website. You can find the perfect team of builders by the photos of their previous work and reviews of other customers just like yourselves.
+              We are here for you to find one another.
+          </p>
+              <p><b>About Builder Company. How this works:</b></p>
+              <p><ins>If you are a builder :</ins></p>
+              <li> First you need to register.</li>
+              <li>Attach images of your previous work.</li>
+              <li>Search for a construction/refurbishment project that interests you in the <i>“Urgent call for a builder”</i> section.</li>
+              <li>Make contact with the customer and make arrangements!</li>
+              <p><ins>If you are a customer :</ins></p>
+              <li>Complete the registration.</li>
+              <li>Use the <i>“Search for a builder”, “Photo Gallery”</i> and <i>“Builder Section”</i> to find the right person for you.</li>
+              <li>Make contact and arrange the project details!</li>
+              </p>
+          </div>
+          <h4><a href="/customers">Customers</a></h4>
+      </div>
       <footer>
           <% include template/footer.ejs %>
       </footer>
   </body>
+
 </html>
