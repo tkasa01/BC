@@ -9,6 +9,6 @@ router.use('/customers', customers);
 router.use('/builders',builders);
 router.use('/login', require('../routes/login'));
 router.use('/posts', require('../routes/posts'));
-router.use('/photogallery',require('../routes/images'));
+router.use('/photogallery', require('../routes/builders'), require('../routes/images'));
 //router.use(require('../config/passport'));
 module.exports = router;
