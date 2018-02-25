@@ -26,13 +26,14 @@ var CustomerSchema = new Schema({
         type: String,
         default: "customer"
     },
-
+    review:{type: Schema.Types.ObjectId, ref: 'Review'}
+/*
     builder: {
         type: Schema.Types.ObjectId,
         ref: 'Builder'
     },
-    review:[{type: Schema.Types.ObjectId, ref: 'Review'}]
 
+*/
 });
 
 CustomerSchema.pre('save', function (next) {

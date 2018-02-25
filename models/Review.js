@@ -4,7 +4,16 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+
 var ReviewSchema = new Schema({
+        review: [{
+                rating: Number,
+                description: String,
+                created: {
+                    type: Date,
+                    default: Date.now
+                }
+    }],
 
     builder_id:{
         type: Schema.Types.ObjectId, //String,
@@ -14,16 +23,7 @@ var ReviewSchema = new Schema({
     author_id:{
         type:Schema.Types.ObjectId,
         ref:'Customer'
-    },
-    review:[{
-        rating: Number,
-        description: String,
-        created: {
-            type: Date,
-            default: Date.now
-        }
-    }]
-
+    }
 });
 
 ReviewSchema.pre('save', function (next) {
@@ -50,5 +50,9 @@ function post(text){
  return average;
  });
  */
+ReviewSchema.methods.getReview = function () {
+    return Review.find({reviewId: this._id});
+
+};
 
 var Review = module.exports = mongoose.model('Review', ReviewSchema);

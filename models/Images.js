@@ -5,21 +5,18 @@ mongoose.connect('mongodb://localhost/BC', { //, {useMongoClient: true}); was ad
 });
 
 var ImagesSchema = new mongoose.Schema({
-
     name: String,
-    img: {
-        data: Buffer,
-        type: String},
+    img: Buffer,
     updated: {
         type: Date,
         default: Date.now
     },
     owner:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'builder',
+        ref: 'Builder',
         required: true
     },
-    categories:[{type: mongoose.Schema.Types.ObjectId, ref:'category'}]
+   // categories:[{type: Schema.Types.ObjectId, ref:'Category'}]
 });
 
 var Image = module.exports = mongoose.model('Image', ImagesSchema);

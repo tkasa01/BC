@@ -4,14 +4,16 @@ var Schema = mongoose.Schema;
 var PostSchema = new Schema({
     title:{ type:String, required: true},
     content: {type: String, required: true},
+
     author_id:{
         type:Schema.Types.ObjectId,
         ref: 'Customer'
     },
-   // author_id:{
-   //     type:String,
-   //     required: true
-  //  },
+/*
+    author_id:{
+        type:String,
+        required: true
+   },*/
     timestamp: {type: Date},
     update: {type: Date, default: Date.now()}
 
