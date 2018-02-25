@@ -26,66 +26,66 @@ exports.builder = function(form){
             if(form && form.email && validator.isEmail(form.email)){
                 Builder.findOne({'email' : form.email},function(err,builder){
                     if(builder){
-                        errors.push('The email address is not available');
+                        errors.push('• The email address is not available');
                         fulfill();
                     }else{
                         fulfill();
                     }
                 })
             }else{
-                errors.push('The email format is incorrect');
+                errors.push('• The email format is incorrect');
                 fulfill();
             }
         });
 
         if(validator.isEmpty(form.title)){
-            errors.push('Your title is empty');
+            errors.push('• Your title is empty');
         }
          if(form.firstname.length > NAME_LENGTH.max || form.firstname.length < NAME_LENGTH.min){
-            errors.push('The First name must be between 2 and 15 characters');
+            errors.push('• The First name must be between 2 and 15 characters');
         }
          if(!validator.isAlpha(form.firstname.replace(' ', ''))){
-            errors.push('Please enter a valid First name');
+            errors.push('• Please enter a valid First name');
         }
 
          if(form.lastname.length > NAME_LENGTH.max || form.lastname.length < NAME_LENGTH.min){
-            errors.push('The Last name must be between 2 and 15 characters');
+            errors.push('• The Last name must be between 2 and 15 characters');
         }
 
         if(!validator.isAlpha(form.lastname.replace(' ', ''))){
-            errors.push('Please enter a valid Last name');
+            errors.push('• Please enter a valid Last name');
         }
 
         if(validator.isEmpty(form.position)){
-            errors.push('Your position must be declared');
+            errors.push('• Your position must be declared');
         }
 
         if(age < MIN_AGE){
          // if(moment(moment(form.dob).format("YYYY"),"YYYY").fromNow() < MIN_AGE) {
-           errors.push('You are too yang');
+           errors.push('• You are too yang');
         }
 
         if(validator.isEmpty(form.email) && !validator.isEmail(form.email)){
-            errors.push('Check the email please');
+            errors.push('• Check the email please');
         }
 
         if((validator.isLength(form.phonenumber) < PHONE_LENGTH) && !validator.isNumeric(form.phonenumber)){
-            errors.push('Enter please UK phone number');
+            errors.push('• Enter please UK phone number');
         }
         /*
 
         if(!validator.isPostalCode(form.postcode, 'UK')){
-            errors.postcode = 'Check the Post Code please';
+            errors.postcode = '• Check the Post Code please';
         }
 */
         if(!validator.isAlpha(form.education.replace(' ', ''))){
-            errors.push('Please enter the level of you education');
+            errors.push('• Please enter the level of you education');
         }
         if(form.password.length <= PASSWORD_LENGTH ){
-            errors.push('The password is too short');
+            errors.push('• The password is too short');
         }
         if(!validator.equals(form.password, form.confpassword)){
-            errors.push('The password does not match with the confirmation password');
+            errors.push('• The password does not match with the confirmation password');
         }
 
         checkEmail.then(function(result){
@@ -108,41 +108,41 @@ exports.customer = function(form){
             if(form && form.email && validator.isEmail(form.email)){
                 Customer.findOne({'email' : form.email},function(err,builder){
                     if(builder){
-                        errors.push('The email address is not available');
+                        errors.push('• The email address is not available');
                         fulfill();
                     }else{
                         fulfill();
                     }
                 })
             }else{
-                errors.push('The email format is incorrect');
+                errors.push('• The email format is incorrect');
                 fulfill();
             }
         });
         if(validator.isEmpty(form.title)){
-            errors.push('Your title is empty');
+            errors.push('• Your title is empty');
         }
         if(form.firstname.length > NAME_LENGTH.max || form.firstname.length < NAME_LENGTH.min){
-            errors.push('The First name must be between 2 and 15 characters');
+            errors.push('• The First name must be between 2 and 15 characters');
         }
         if(!validator.isAlpha(form.firstname.replace(' ', ''))){
-            errors.push('Please enter a valid First name');
+            errors.push('• Please enter a valid First name');
         }
 
         if(form.lastname.length > NAME_LENGTH.max || form.lastname.length < NAME_LENGTH.min){
-            errors.push('The Last name must be between 2 and 15 characters');
+            errors.push('• The Last name must be between 2 and 15 characters');
         }
 
         if(!validator.isAlpha(form.lastname.replace(' ', ''))){
-            errors.push('Please enter a valid Last name');
+            errors.push('• Please enter a valid Last name');
         }
 
         if(validator.isEmpty(form.email) && !validator.isEmail(form.email)){
-            errors.push('Check the email please');
+            errors.push('• Check the email please');
         }
 
         if((validator.isLength(form.phonenumber) < PHONE_LENGTH) && !validator.isNumeric(form.phonenumber)){
-            errors.push('Enter please UK phone number');
+            errors.push('• Enter please UK phone number');
         }
         /*
 
@@ -152,10 +152,10 @@ exports.customer = function(form){
          */
 
         if(form.password.length <= PASSWORD_LENGTH ){
-            errors.push('The password is too short');
+            errors.push('• The password is too short');
         }
         if(!validator.equals(form.password, form.confpassword)){
-            errors.push('The password does not match with the confirmation password');
+            errors.push('• The password does not match with the confirmation password');
         }
 
         checkEmail.then(function(result) {

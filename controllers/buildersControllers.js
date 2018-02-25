@@ -5,17 +5,19 @@ var mongoose = require('mongoose');
 var Builder = require('../models/Builder');
 //var Review = require('../models/Post');
 var validation = require('./handlers/validation');
+var async = require('async');
 var builderController = {};
 
 //all list of builders
 builderController.list = function(req, res) {
-    Builder.find({}).exec(function (err, builders) {
+    Builder.find({}).populate('review').exec(function (err, builders) {
         if (err) {
             res.send(err);
         } else {
             res.render('../views/builders/list', {
                 pageTitle: 'List of Builders',
                 builders: builders,
+                review:req.review,
                 user: req.user
             });
         }
@@ -33,7 +35,7 @@ builderController.findByName = function(req, res){
 
     Builder.find( {$and:[{firstname : req.body.firstname, lastname :req.body.lastname }]},function(err,builders){
         if(err || !builders){
-            global.errors =['Not found'];
+            global.errors =['• Not found'];
             res.send('non found');
         }else{
             res.render('../views/builders/show',{
@@ -66,31 +68,65 @@ builderController.show = function(req, res){
             res.render('../views/index',{
                 pageTitle: 'Home page',
                 builder: builder,
-                user: req.user
+                user: req.user,
+                errors: global.errors,
+                messages: global.messages
             });
         }
         else{
             console.log(builder);
-            var builderMessage = 'I am a qualified builder with experience';
-            res.render('../views/builders/profile', {
-                builderMessage: builderMessage,
-                pageTitle: 'Builder\'s a home page',
-                user: req.user,
-                builder: builder,
-              //  owner: req.params.id === req.user.user.id ? true : false,
-                reviews: req.review
-                 });
+            var array = [];
+            async.forEach(array,function(review, callback){
+                if(review.author_id){
+                    Builder.findById(review.builder_id,function(err, builder){
+                        //console.log(customer);
+                        array.push({
+                            reviews : review,
+                            builder: builder,
+                            rating: review.rating,
+                            description:review.description});
+                        callback();
+
+                    })
+                }else{
+                    callback();
+                }
+            },function(err){
+                if(err) res.send(err);
+                    // var dob = req.dob.toISOString();
+                    // dob = dob.substring(0, dob.indexOf('T'));
+                    console.log(err);
+
+                    //==============================
+                    var builderMessage = 'I am a qualified builder with experience';
+                    res.render('../views/builders/profile', {
+                        builderMessage: builderMessage,
+                        pageTitle: 'Builder\'s a home page',
+                        user: req.user,
+                        builder: builder,
+                        errors: global.errors,
+                        messages: global.messages,
+                      //  owner: req.params.id === req.user.user.id ? true : false,
+                        reviews: req.review
+                         });
+                global.errors = '';
+                global.messages = '';
+              });//
         }
-});
+    });
+
 };
 
 builderController.showRegistrationPage = function(req,res){
     res.render('builders/registration', {
         pageTitle: 'Registration Page for builders',
         user: req.user,
-        errors: global.errors
+        reviews: req.review,
+        errors: global.errors,
+        messages: global.messages
     });
     global.errors = '';
+    global.messages = '';
 };
 
 
@@ -103,6 +139,7 @@ builderController.save = function(req, res) {
                 res.json(err);
             }else{
                 console.log(builder);
+                global.messages = ['You are successful registered, please log in'];
                 res.redirect("/login");
             }
         });
@@ -112,6 +149,7 @@ builderController.save = function(req, res) {
 
     });
     global.errors = '';
+    global.messages = '';
 };
 
 //add by id function
@@ -156,7 +194,7 @@ builderController.update = function(req, res){
                res.render("../views/builders/edit", {builder: req.body,  user: req.user});
            }
 
-               res.redirect('/builders/show/'+builder._id, { user: req.user});
+               res.redirect('/builders/show/'+ builder._id, { user: req.user});
       });
  };
 

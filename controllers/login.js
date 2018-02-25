@@ -7,7 +7,7 @@ var store = require('store');
 function checkData(req, res, next){
     var user = req.body;
     if(!user.email){
-        global.errors = ['The user is not found'];
+        global.errors = ['• The user is not found'];
         res.redirect("/login");
     }
     next();
@@ -20,10 +20,10 @@ exports.login = function(req, res, next){
                  if (bcrypt.compareSync(req.body.password, builder.password)) {
                     var token = auth.signToken(builder); //login successful
                     store.set('jwt', token);
-                    console.log(builder);
-                    res.redirect('/builders/profile/' + builder.id);
+                     global.messages = ['You are logged in'];
+                     res.redirect('/builders/profile/' + builder.id);
                 } else {
-                    global.errors = ['Incorrect password'];
+                    global.errors = ['• Incorrect password'];
                     res.redirect("/login");
                 }
             }else{
@@ -32,22 +32,23 @@ exports.login = function(req, res, next){
                         if (bcrypt.compareSync(req.body.password, customer.password)){
                             var token = auth.signToken(customer);
                             store.set('jwt', token);
+                            global.messages = ['You have successfully logged in'];
                             res.redirect('/customers/profile/' + customer.id);
                             //res.redirect('/');
-                            console.log(customer);
+
                         } else {
-                            global.errors = ['Incorrect password'];
+                            global.errors = ['• Incorrect password'];
                             res.redirect("/login");
                         }
                     }else{
-                        global.errors = ['The user is not found'];
+                        global.errors = ['• The user is not found'];
                         res.redirect("/login");
                     }
                 });
             }
         })
     }else{
-        global.errors = ["Please enter an email and a password"];
+        global.errors = ["• Please enter an email and a password"];
         res.redirect("/login");
     }
 };
@@ -55,8 +56,8 @@ exports.login = function(req, res, next){
 
 exports.logout = function(req,res,next){
     store.remove('jwt');
-    global.messages = ['You are log out'];
-    res.redirect('/');
+    global.messages = ['You have been logged out'];
+    res.redirect('/login');
 };
 
 
