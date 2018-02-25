@@ -6,6 +6,7 @@ var session = require('express-session');
 var shortid = require('shortid');
 var mongoose = require('mongoose');
 var methodOverride = require('method-override');
+var multer = require('multer');
 
 var validator = require('validator');
 var _ = require('lodash');
@@ -30,8 +31,15 @@ var Customer = mongoose.model('Customer');
 require('./models/Post');
 var Post = mongoose.model('Post');
 
+require('./models/Review');
+var Review = mongoose.model('Review');
+
 require('./models/Images');
 var Image = mongoose.model('Image');
+
+require('./models/Category');
+var Category = mongoose.model('Category');
+
 console.log('listen on port 3000' + db);
 
 //app.locals.info = 'flash';
@@ -63,6 +71,8 @@ app.use(session({
     cookie: {maxAge: 180*60*1000} //2 hours
 }));
 
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -74,7 +84,7 @@ app.get('/favicon.ico', function(req, res) {
     res.status(204);
 });
 
-app.use(function(req,res,next){
+app.use(function(req, res, next){
     req.messages = [];
     req.errors = [];
     next();
