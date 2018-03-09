@@ -7,6 +7,9 @@ var shortid = require('shortid');
 var mongoose = require('mongoose');
 var methodOverride = require('method-override');
 var multer = require('multer');
+var GridFsStorage = require('multer-gridfs-storage');
+var Grid = require('gridfs-stream');
+var crypto = require('crypto');
 
 var validator = require('validator');
 var _ = require('lodash');
@@ -18,6 +21,7 @@ var api = require('./api/router');
 
 mongoose.Promise = global.Promise;
 //var MongoStore = require('connect-mongo')(session);
+//create connection
 var db = mongoose.connect('mongodb://localhost/BC',{
   useMongoClient: true
 });
@@ -46,8 +50,8 @@ console.log('listen on port 3000' + db);
 app.locals.siteTitle = 'Building Company';
 
 /*it is a middleware function that gives the value of that id, it is a forth argument */
-app.param('id', function(req,res, next,id){
-        console.log("this is my id" +id);
+app.param('id', function(req, res, next, id){
+        console.log("this is my id" + id);
         next();
 });
 
@@ -90,6 +94,36 @@ app.use(function(req, res, next){
     next();
 });
 
+//======================================================
+var gfs;
+db.once('open', function(){
+    //init stream
+     gfs = Grid(db, mongoose.mongo);
+     gfs.collection('Images');
+});
+
+//create storage engine
+var storage = new GridFsStorage({
+    url: db,
+    file:function (req, file){
+        return new Promise(function(resolve, reject){
+           crypto.randomBytes(16, function(err, buf){
+               if(err){
+                   return reject(err);
+               }
+               const filename = buf.toString('hex') + path.extname(file.originalname);
+               const fileInfo = {
+                   filename:filename,
+                   categories: categories,
+                   bucketName: 'Images' // backetname shoul math to the collection name
+               };
+               resolve(fileInfo);
+           })
+        })
+    }
+});
+
+const upload = multer(storage);
 
 // error handler
 app.use(function(err, req, res, next) {
