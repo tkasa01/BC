@@ -6,7 +6,7 @@ mongoose.connect('mongodb://localhost/BC', { //, {useMongoClient: true}); was ad
 
 var ImagesSchema = new mongoose.Schema({
     name: String,
-    img: Buffer,
+    file: Buffer,
     updated: {
         type: Date,
         default: Date.now
