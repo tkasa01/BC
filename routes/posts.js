@@ -8,13 +8,21 @@ var posts = require('../controllers/postControllers');
 postRouter.post('/posts',  posts.savePost);
 
 postRouter.get('/posts', posts.list);
+/*
+postRouter.get('/posts/delete/', function(req, res, next){
+    res.render('posts',{
+        pageTitle: 'List ',
+        user: req.user
+    });
+    next();
+});*/
 
-postRouter.post('/delete/:id',  posts.checkOwner, posts.delete); //
+postRouter.post('/delete/:id',    posts.delete); //posts.checkOwner,
 
 
 postRouter.post('/postReview/:id', posts.saveReview) ;
 
-//postRouter.post('/delete/:id', loggedIn, posts.delete);
+
 
 //postRouter.get('/builders/profile/:id', posts.listReviews);
 
