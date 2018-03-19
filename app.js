@@ -5,11 +5,10 @@ var favicon = require('serve-favicon');
 var session = require('express-session');
 var shortid = require('shortid');
 var mongoose = require('mongoose');
+
 var methodOverride = require('method-override');
-var multer = require('multer');
-var GridFsStorage = require('multer-gridfs-storage');
-var Grid = require('gridfs-stream');
-var crypto = require('crypto');
+
+
 
 var validator = require('validator');
 var _ = require('lodash');
@@ -38,8 +37,8 @@ var Post = mongoose.model('Post');
 require('./models/Review');
 var Review = mongoose.model('Review');
 
-require('./models/Images');
-var Image = mongoose.model('Image');
+require('./models/GFS');
+var GFS = mongoose.model('GFS');
 
 require('./models/Category');
 var Category = mongoose.model('Category');
@@ -63,7 +62,7 @@ app.use('/', api);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(methodOverride());
+app.use(methodOverride('_method'));
 app.use(session({
     secret: 'foolala',
     saveUninitialized: true,
@@ -93,37 +92,6 @@ app.use(function(req, res, next){
     req.errors = [];
     next();
 });
-
-//======================================================
-var gfs;
-db.once('open', function(){
-    //init stream
-     gfs = Grid(db, mongoose.mongo);
-     gfs.collection('Images');
-});
-
-//create storage engine
-var storage = new GridFsStorage({
-    url: db,
-    file:function (req, file){
-        return new Promise(function(resolve, reject){
-           crypto.randomBytes(16, function(err, buf){
-               if(err){
-                   return reject(err);
-               }
-               const filename = buf.toString('hex') + path.extname(file.originalname);
-               const fileInfo = {
-                   filename:filename,
-                   categories: categories,
-                   bucketName: 'Images' // backetname shoul math to the collection name
-               };
-               resolve(fileInfo);
-           })
-        })
-    }
-});
-
-const upload = multer(storage);
 
 // error handler
 app.use(function(err, req, res, next) {
