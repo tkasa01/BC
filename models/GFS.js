@@ -16,7 +16,7 @@ var crypto = require('crypto');
 mongoose.Promise = global.Promise;
 var conn = mongoose.connection;
 
-var schemaGFS = new Schema({},{strict: false}, "fs.files");
+var schemaGFS = new Schema({},{strict: false}, "images.files");
 var GFS = mongoose.model('GFS', schemaGFS);
 
 
@@ -48,6 +48,6 @@ var storage = new GridFsStorage({
     }
 });
 
-var upload = multer({storage: storage}).single('file');
-
+//var upload = multer({storage: storage}).single('file');
+exports.storage = storage;
 
