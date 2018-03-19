@@ -4,11 +4,12 @@
 var express = require('express');
 var router = express.Router();
 var builders = require('../controllers/buildersControllers');
-var GFS = require('../models/GFS');
 
+var GFS = require('../models/GFS');
 var multer = require('multer');
 var storage = GFS.storage;
 var upload = multer({storage: storage});
+
 
 function authorize(req, res, next){
     if(req.user === 'builder'){
@@ -41,8 +42,7 @@ router.get('/profile/:id/photo/upload', builders.displayUploadPage);
 
 
 
-router.post('/profile/:id/photo/upload',  upload.single('file'),function(req, res) {
-
+router.post('/profile/:id/photo/upload',   upload.single('file') ,function(req, res) {
         res.render('./photo/photogallery', {
             pageTitle: 'Collection of the builders work',
             title: 'Categories: ',
