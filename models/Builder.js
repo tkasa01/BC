@@ -24,6 +24,10 @@ var BuilderSchema = new Schema({
             type: String,
             default: "builder"
         },
+    file:{
+        type: Schema.Types.ObjectId,
+        ref: 'GFS'
+    },
 
     review:[
         {
