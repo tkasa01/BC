@@ -4,7 +4,6 @@ var multer = require('multer');
 var path = require('path');
 var mongoURL = 'mongodb://localhost/BC';
 
-
 //create connection
 var db = mongoose.connect(mongoURL,{
     useMongoClient: true
@@ -16,6 +15,10 @@ var crypto = require('crypto');
 
 mongoose.Promise = global.Promise;
 var conn = mongoose.connection;
+
+var schemaGFS = new Schema({},{strict: false}, "fs.files");
+var GFS = mongoose.model('GFS', schemaGFS);
+
 
 //========== the block for upload images ===============
 var gfs;
@@ -35,15 +38,8 @@ var storage = new GridFsStorage({
                     return reject(err);
                 }
                 const filename = buf.toString('hex') + path.extname(file.originalname);
-                const categories = function(form, cb) {
-                    if(categories.value !== ""){
-                        cb(null, req.body.categories.value);
-                    }
-                    console.log(categories(cb));
-                };
                 const fileInfo = {
                     filename:filename,
-                    categories: categories,
                     bucketName: 'images'
                 };
                 resolve(fileInfo);
@@ -52,7 +48,6 @@ var storage = new GridFsStorage({
     }
 });
 
- var upload = multer({storage: storage}).single('file');
+var upload = multer({storage: storage}).single('file');
 
 
-var GFS = module.exports = mongoose.model('GFS', new Schema({} ,{strict: false}, "images.files"));
