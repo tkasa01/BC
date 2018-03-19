@@ -39,12 +39,10 @@
                 <a href="mailto:taniakysa@mail.ru"> E-mail </a>  or
                 <a href="https://www.linkedin.com/"> Linkedin </a>
             </p>
-
-
         </table>
         <h3><a href="/builders/edit/<%= builder._id%>">Edit your details</a></h3>
 
-        <h2><a href="photo/upload"> Upload image</a></h2>
+        <h2><a href="/builders/profile/<%= builder._id %>/photo/upload"> Upload image</a></h2>
 
         <form action="/builders/delete/<%= builder._id%>" method="post">
             <button type="submit" onclick="<%-" deleteConfirm()" %>">Delete your profile</button>
@@ -71,11 +69,11 @@
             </form>
         </table>
     </div>
+
+    </div>
     <!--------------------------------------------------------------------------------->
 <footer>
     <% include ../template/footer.ejs %>
 </footer>
-</div>
 </body>
-
 </html>

@@ -13,7 +13,7 @@
     </style>
 </header>
 <div>
-<form method="post" action="/photo/upload" enctype="multipart/form-data">
+    <form method="post" action="/builders/profile/<%= builder._id%>/photo/upload" enctype="multipart/form-data">
     <div class="images-upload">
         <h2>Upload the images:</h2>
         <div class="brows">
@@ -38,24 +38,6 @@
 </form>
     <footer>
         <% include ../template/footer.ejs %>
-    <hr>
-    <div>
-        <% if(files){ %>
-        <% files.forEach(function(file) { %>
-        <% if (file.isImage) { %>
-        <img class="display" src="images/<%=file.filename %>" alt=" ">
-        <%} else { %>
-        <%= file.filename %>
-        <% } %>
-        <form method="post" action="/builders/profile/<%= builder._id%>/photo/images/<%= file._id %>?_method=delete">
-            <button>Delete</button>
-        </form>
-    </div>
-    <% }) %>
-    <% } else { %>
-    <p> No file to show </p>
-    <% } %>
-
 </footer>
 </div>
 </body>
