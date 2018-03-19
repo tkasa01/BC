@@ -22,7 +22,6 @@ module.exports = function (app) {
     app.use(function(req,res,next){
         if(store.get('jwt')){
             auth.checkAuth(store.get('jwt')).then(function(user){
-                console.log('i should run first');
                 req.user = user.user;
                 req.role = user.role;
                 next();
@@ -31,7 +30,6 @@ module.exports = function (app) {
                 next();
             })
         }else{
-           // console.log('I am not log');
             req.user = null;
             req.role = "guest";
             next();
