@@ -1,9 +1,10 @@
 /**
  * Created by tkasa on 19/12/2017.
  */
+
 var mongoose = require('mongoose');
 var Builder = require('../models/Builder');
-//var Review = require('../models/Post');
+var Review = require('../models/Review');
 var validation = require('./handlers/validation');
 var async = require('async');
 var builderController = {};
@@ -62,56 +63,37 @@ builderController.findByName = function(req, res){
 
 //shows single
 builderController.show = function(req, res){
-    Builder.findOne({_id: req.params.id}).exec(function(err, builder){
+    Builder.findOne({_id: req.params.id}).populate('review' ).exec(function(err, builder){
+
         if(err){
-            console.log(err);
-            res.render('../views/index',{
-                pageTitle: 'Home page',
-                builder: builder,
-                user: req.user,
-                errors: global.errors,
-                messages: global.messages
-            });
+            res.send(err);
         }
         else{
-            console.log(builder);
-            var array = [];
-            async.forEach(array,function(review, callback){
-                if(review.author_id){
-                    Builder.findById(review.builder_id,function(err, builder){
-                        //console.log(customer);
-                        array.push({
-                            reviews : review,
-                            builder: builder,
-                            rating: review.rating,
-                            description:review.description});
-                        callback();
+              Review.find({reviews:req.body.reviews }).exec(function(err, reviews, customers) {
 
-                    })
-                }else{
-                    callback();
-                }
-            },function(err){
-                if(err) res.send(err);
-                    // var dob = req.dob.toISOString();
-                    // dob = dob.substring(0, dob.indexOf('T'));
-                    console.log(err);
+                   console.log(reviews);
+                   if (err) {
+                       res.send(err)
+                   } else {
+                       var builderMessage = 'I am a qualified builder with experience';
+                           res.render('../views/builders/profile', {
+                               builderMessage: builderMessage,
+                               pageTitle: 'Builder\'s a home page',
+                               user: req.user,
+                               builder: builder,
+                               author_id: customers,
+                               reviews: reviews,
+                               errors: global.errors,
+                               messages: global.messages
 
-                    //==============================
-                    var builderMessage = 'I am a qualified builder with experience';
-                    res.render('../views/builders/profile', {
-                        builderMessage: builderMessage,
-                        pageTitle: 'Builder\'s a home page',
-                        user: req.user,
-                        builder: builder,
-                        errors: global.errors,
-                        messages: global.messages,
-                      //  owner: req.params.id === req.user.user.id ? true : false,
-                        reviews: req.review
-                         });
-                global.errors = '';
-                global.messages = '';
-              });//
+                               //  owner: req.params.id === req.user.user.id ? true : false,
+
+                           });
+                       global.errors = '';
+                       global.messages = '';
+                   }
+               });
+
         }
     });
 
@@ -135,10 +117,8 @@ builderController.save = function(req, res) {
         var builder = new Builder(validatedUser);
         builder.save(function (err, builder){
             if(err){
-               console.log(err);
                 res.json(err);
             }else{
-                console.log(builder);
                 global.messages = ['You are successful registered, please log in'];
                 res.redirect("/login");
             }
@@ -170,8 +150,6 @@ builderController.edit = function(req, res) {
 
 //update
 builderController.update = function(req, res){
-   // var update = req.body;
-    //    if(update.id){delete update.id;}
         Builder.findByIdAndUpdate(req.params.id, {$set: {
         title: req.body.title,
         firstname: req.body.firstname,
@@ -213,37 +191,98 @@ builderController.update = function(req, res){
  };
 
 
-/*
-builderController.postReview = function (req, res) {
-    var review = req.body;
-    Builder.findById(req.params.id, function(err, builder){
-        if(builder){
-            builder.reviews.push(review);
-            builder.save()
-        }else{
-            res.send(err);
-        }
-    })
-};
-builderController.displayPost = function(req, res){
+//=============== upload images functions ==========================
+
+builderController.displayUploadPage = function(req, res){
     Builder.findOne({_id: req.params.id}).exec(function (err, builder) {
         if (err) {
             console.log("Error:", err);
             res.status(400).send("builder doesn't exist");
-        }else {
-            res.render("../views/builders/profile", {
+        }else{
+            res.render('photo/upload',{
+                pageTitle: 'Upload the images',
                 builder: builder,
-                user: req.user,
-                pageTitle:'Builder edit page'});
+                _id: req.params.id,
+                user: req.user
+            });
         }
     });
 };
+builderController.uploadFile =  function(req, res) {
+     upload.single('file');
+
+        /*
+         res.render('./photo/photogallery',{
+             pageTitle: 'Collection of the builders work',
+             title: 'Categories: ',
+             categories: ['Bathrooms', 'Electricity', 'Paining', 'Carpenter'],
+             user: req.user,
+             files: req.files
+             //builder: builder,
+             //_id: req.params.id,
+        });
 */
+};
+
  module.exports = builderController;
 
 
 
 
+/*builderController.show = function(req, res){
+ Builder.findOne({_id: req.params.id}).exec(function(err, builder){
+ if(err){
+ // console.log(err);
+ res.render('../views/index',{
+ pageTitle: 'Home page',
+ builder: builder,
+ user: req.user,
+ errors: global.errors,
+ messages: global.messages
+ });
+ }
+ else{
+ console.log(builder);
+ var array = [];
+ async.forEach(array,function(review, callback){
+ if(review.author_id){
+ Builder.findById(review.builder_id,function(err, builder){
+ //console.log(customer);
+ array.push({
+ reviews : review,
+ builder: builder,
+ rating: review.rating,
+ description:review.description});
+ callback();
+ })
+ }else{
+ callback();
+ }
+ },function(err){
+ if(err) res.send(err);
+ // var dob = req.dob.toISOString();
+ // dob = dob.substring(0, dob.indexOf('T'));
+ console.log(err);
+ //==============================
+ var builderMessage = 'I am a qualified builder with experience';
+ res.render('../views/builders/profile', {
+ builderMessage: builderMessage,
+ pageTitle: 'Builder\'s a home page',
+ user: req.user,
+ builder: builder,
+ errors: global.errors,
+ messages: global.messages,
+ //  owner: req.params.id === req.user.user.id ? true : false,
+ reviews: req.review
+ });
+ global.errors = '';
+ global.messages = '';
+ });
+ }
+ });
+
+ };
+* */
 
 
 
