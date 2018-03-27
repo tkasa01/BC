@@ -40,6 +40,23 @@
                 <a href="https://www.linkedin.com/"> Linkedin </a>
             </p>
         </table>
+        <!-------------------------------- display reviews ---------------------->
+        <h2>Reviews about me :</h2>
+        <% reviews.forEach(function(review){%>
+
+                 <p><%=review.description%></p>
+                 <p><%=review.rating%></p>
+
+                <p><%=review.author_id.firstname  + " " + review.author_id.lastname%></p>
+                <p><%=review.builder_id%></p>
+        <hr>
+        <% })%>
+
+
+
+        </tr>
+        </tbody>
+
         <h3><a href="/builders/edit/<%= builder._id%>">Edit your details</a></h3>
 
         <h2><a href="/builders/profile/<%= builder._id %>/photo/upload"> Upload image</a></h2>
@@ -69,7 +86,7 @@
             </form>
         </table>
     </div>
-
+<!--------------------------------------------------------------------------------------------->
     </div>
     <!--------------------------------------------------------------------------------->
 <footer>
