@@ -34,7 +34,11 @@ builderController.displayPage = function(req, res){
 
 builderController.findByName = function(req, res){
 
-    Builder.find( {$and:[{firstname : req.body.firstname, lastname :req.body.lastname }]},function(err,builders){
+    Builder.find( {$and:[{
+        firstname : req.body.firstname,
+        lastname :req.body.lastname,
+        position:req.body.position
+    }]},function(err,builders){
         if(err || !builders){
             global.errors =['• Not found'];
             res.send('non found');
@@ -63,15 +67,16 @@ builderController.findByName = function(req, res){
 
 //shows single
 builderController.show = function(req, res){
-    Builder.findOne({_id: req.params.id}).populate('review' ).exec(function(err, builder){
+    Builder.findOne({_id: req.params.id}).populate('review').exec(function(err, builder){
+        var review = [];
+       // if(builder === f){
 
         if(err){
             res.send(err);
         }
         else{
-              Review.find({reviews:req.body.reviews }).exec(function(err, reviews, customers) {
-
-                   console.log(reviews);
+              Review.find({}).exec(function(err, reviews, customers) {
+                   console.log(customers);
                    if (err) {
                        res.send(err)
                    } else {
@@ -93,8 +98,8 @@ builderController.show = function(req, res){
                        global.messages = '';
                    }
                });
-
         }
+       // }else{res.send('you are not registered as a builder');}
     });
 
 };
