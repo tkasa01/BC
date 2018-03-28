@@ -5,6 +5,7 @@
 var mongoose = require('mongoose');
 var Builder = require('../models/Builder');
 var Review = require('../models/Review');
+var Customer = require('../models/Customer');
 var validation = require('./handlers/validation');
 var async = require('async');
 var builderController = {};
@@ -18,9 +19,10 @@ builderController.list = function(req, res) {
             res.render('../views/builders/list', {
                 pageTitle: 'List of Builders',
                 builders: builders,
-                review:req.review,
+                review: req.review,
                 user: req.user
             });
+            console.log('review' + req.review);
         }
     });
 };
@@ -68,38 +70,47 @@ builderController.findByName = function(req, res){
 //shows single
 builderController.show = function(req, res){
     Builder.findOne({_id: req.params.id}).populate('review').exec(function(err, builder){
-        var review = [];
-       // if(builder === f){
-
         if(err){
             res.send(err);
         }
         else{
-              Review.find({}).exec(function(err, reviews, customers) {
-                   console.log(customers);
-                   if (err) {
-                       res.send(err)
-                   } else {
-                       var builderMessage = 'I am a qualified builder with experience';
-                           res.render('../views/builders/profile', {
-                               builderMessage: builderMessage,
-                               pageTitle: 'Builder\'s a home page',
-                               user: req.user,
-                               builder: builder,
-                               author_id: customers,
-                               reviews: reviews,
-                               errors: global.errors,
-                               messages: global.messages
+              Review.find({}).populate('author_id').exec(function(err, reviews, customer) {
+                  if (err) {
+                      res.send(err)
+                  } else {
+                      var data = [];
+                      async.forEach(reviews, function (review, callback) {
+                          if (review.author_id) {
+                              Customer.findById(review.author_id, function (err, customer) {
+                                  data.push({review: review, author_id: customer});
+                                  callback();
+                              })
+                          } else {
+                              callback();
+                          }
+                      }, function (err) {
+                          if (err) res.send(err);
+                          var builderMessage = 'I am a qualified builder with experience';
+                          res.render('../views/builders/profile', {
+                              builderMessage: builderMessage,
+                              pageTitle: 'Builder\'s a home page',
+                              user: req.user,
+                              builder: builder,
+                              author_id: customer,
+                              reviews: reviews,
+                              errors: global.errors,
+                              messages: global.messages
+                              //  owner: req.params.id === req.user.user.id ? true : false,
+                          });
+                          global.errors = '';
+                          global.messages = '';
+                      })
 
-                               //  owner: req.params.id === req.user.user.id ? true : false,
+                  }
 
-                           });
-                       global.errors = '';
-                       global.messages = '';
-                   }
-               });
+              });
         }
-       // }else{res.send('you are not registered as a builder');}
+
     });
 
 };
@@ -215,7 +226,15 @@ builderController.displayUploadPage = function(req, res){
 };
 builderController.uploadFile =  function(req, res) {
      upload.single('file');
-
+res.redirect('/photo/photogallery', {
+    pageTitle: 'Collection of the builders work',
+    title: 'Categories: ',
+    categories: ['Bathrooms', 'Electricity', 'Paining', 'Carpenter'],
+    user: req.user,
+    files: req.files
+    //builder: builder,
+    //_id: req.params.id,
+});
         /*
          res.render('./photo/photogallery',{
              pageTitle: 'Collection of the builders work',
@@ -227,6 +246,7 @@ builderController.uploadFile =  function(req, res) {
              //_id: req.params.id,
         });
 */
+
 };
 
  module.exports = builderController;
