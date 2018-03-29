@@ -1,7 +1,6 @@
 /**
  * Created by tkasa on 19/12/2017.
  */
-
 var mongoose = require('mongoose');
 var Builder = require('../models/Builder');
 var Review = require('../models/Review');
@@ -12,17 +11,15 @@ var builderController = {};
 
 //all list of builders
 builderController.list = function(req, res) {
-    Builder.find({}).populate('review').exec(function (err, builders) {
+    Builder.find({}).exec(function (err, builders) {
         if (err) {
             res.send(err);
         } else {
             res.render('../views/builders/list', {
                 pageTitle: 'List of Builders',
                 builders: builders,
-                review: req.review,
                 user: req.user
             });
-            console.log('review' + req.review);
         }
     });
 };
@@ -70,41 +67,45 @@ builderController.findByName = function(req, res){
 //shows single
 builderController.show = function(req, res){
     Builder.findOne({_id: req.params.id}).populate('review').exec(function(err, builder){
+        var b =  builder.id;
         if(err){
             res.send(err);
         }
         else{
-              Review.find({}).populate('author_id').exec(function(err, reviews, customer) {
+              Review.find({}).populate('author_id  builder_id').exec(function(err, reviews, customer) {
                   if (err) {
                       res.send(err)
                   } else {
                       var data = [];
-                      async.forEach(reviews, function (review, callback) {
-                          if (review.author_id) {
-                              Customer.findById(review.author_id, function (err, customer) {
-                                  data.push({review: review, author_id: customer});
+                          async.filter(reviews.builder_id, function (review, callback) {
+
+                              if (review.author_id) {
+                                  Customer.findById(review.author_id, function (err, customer) {
+                                      data.push({review: review, author_id: customer, builder_id: builder });
+
+                                      callback();
+                                  })
+                              } else {
                                   callback();
-                              })
-                          } else {
-                              callback();
-                          }
-                      }, function (err) {
-                          if (err) res.send(err);
-                          var builderMessage = 'I am a qualified builder with experience';
-                          res.render('../views/builders/profile', {
-                              builderMessage: builderMessage,
-                              pageTitle: 'Builder\'s a home page',
-                              user: req.user,
-                              builder: builder,
-                              author_id: customer,
-                              reviews: reviews,
-                              errors: global.errors,
-                              messages: global.messages
-                              //  owner: req.params.id === req.user.user.id ? true : false,
+                              }
+
+                          }, function (err) {
+                              if (err) res.send(err);
+                              var builderMessage = 'I am a qualified builder with experience';
+                              res.render('../views/builders/profile', {
+                                  builderMessage: builderMessage,
+                                  pageTitle: 'Builder\'s a home page',
+                                  user: req.user,
+                                  builder: builder,
+                                  author_id: customer,
+                                  reviews: reviews,
+                                  errors: global.errors,
+                                  messages: global.messages
+                                  //  owner: req.params.id === req.user.user.id ? true : false,
+                              });
+                              global.errors = '';
+                              global.messages = '';
                           });
-                          global.errors = '';
-                          global.messages = '';
-                      })
 
                   }
 
