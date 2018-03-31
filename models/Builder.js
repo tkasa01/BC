@@ -28,14 +28,17 @@ var BuilderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'GFS'
     },
-
-    review:[
+    review:
         {
             type: Schema.Types.ObjectId,
             ref: 'Review'
-        }
+        },
+    author_id:{
+        type: Schema.Types.ObjectId,
+        ref: 'Customer'
+    }
 
-    ]
+
 
 });
 
