@@ -1,90 +1,103 @@
 var mongoose = require('mongoose');
 var multer = require('multer');
-var Image = require('../models/Images');
+var GFS = require('../models/GFS');
+var Builder = require('../models/Builder');
 var path = require('path');
-var imagesController = {};
-
-var mongoURL = 'mongodb://localhost/BC';
-//create connection
-var db = mongoose.connect(mongoURL,{
-    useMongoClient: true
-    // reconnectTries: Number.MAX_VALUE
-});
-var conn = mongoose.connection;
-var GridFsStorage = require('multer-gridfs-storage');
 var Grid = require('gridfs-stream');
+var GridFsStorage = require('multer-gridfs-storage');
+var storage = GFS.storage;
+var upload = multer({storage: storage});
+mongoose.Promise = global.Promise;
+var conn = mongoose.connection;
 Grid.mongo = mongoose.mongo;
-var crypto = require('crypto');
+var gfs ;
 
-var gfs;
 conn.once('open', function(){
     //init stream
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('images');
 });
 
+exports.displayImages = function(req, res) {
+                gfs.files.find().toArray(function (err, files) {
+                    if (!files || files.length === 0) {
+                        res.render('./photo/photogallery', {
+                            files: files,
+                            title: 'Categories: ',
+                            categories: ['Bathrooms', 'Electricity', 'Paining', 'Carpenter'],
+                            user: req.user
+                        });
+                    } else {
+                        files.map(function (file) {
+                            if (file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg') {
+                                file.isImage = true;
+                                var readstream = gfs.createReadStream(file.filename);
+                                readstream.pipe(res);
+                            }
+                        });
+                        res.render('./photo/photogallery', {
+                            files: files,
+                            title: 'Categories: ',
+                            categories: ['Bathrooms', 'Electricity', 'Paining', 'Carpenter'],
+                            user: req.user,
+                            _id: req.params.id
+                        });
+                    }
 
-//create storage engine
-var storage = new GridFsStorage({
-    url: mongoURL,
-    file: function (req, file){
-        return new Promise(function(resolve, reject){
-            crypto.randomBytes(16, function(err, buf){
-                if(err){
-                    return reject(err);
-                }
-                const filename = buf.toString('hex') + path.extname(file.originalname);
-                // const categories = req.body.categories.value;
-                const fileInfo = {
-                    filename:filename,
-                    //    categories: categories,
-                    bucketName: 'images' // backendname should math to the collection name
-                };
-                resolve(fileInfo);
-                console.log(req.body.categories);
-            })
-        })
-    }
-});
-const upload = multer({storage: storage});
-
-imagesController.list = function(req, res, next){
-    Image.find({}).exec(function(err, categories){
-        if(err){
-            res.sendStatus(403);
-        }else{
-            res.render('../views/photo/photogallery',{
-                pageTitle: 'Collection of the builders work',
-                title: 'Categories: ',
-                categories: ['Bathrooms', 'Electricity', 'Paining', 'Carpenter'],
-                user: req.user
-            })
-        }
-    });
-    next();
+                 });
 };
 
-imagesController.uploadImage =  upload.single('file'), function(req, res){
-    res.redirect('/photogallery');
-};
 
-imagesController.uploadFile = function(req, res){
-    gfs.files.find().toArray(function (err, files) {
-        if (!files || files.length == 0) {
-            res.render('/upload', {
-                files: false,
-                user: req.user
-            });
-        } else {
-            files.map(function (file) {
-                if (file.contentType === 'image/jpeg' || file.contentType === 'img/png' || file.contentType === 'image/jpg') {
-                    file.isImage = true;}
-            });
+//display one image
+ exports.displayOneImage = function (req, res){
+     gfs.files.findOne({filename: req.params.filename},function(err, file){
+         if(!file || file.length === 0){
+             return res.status(404).json({
+                err: 'No file exist'
+             })
+         }
+         if(file.contentType === 'image/jpeg' || file.contentType === 'img/png' || file.contentType === 'image/png'){
+         //read output
+            var readstream = gfs.createReadStream(file.filename);
+            readstream.pipe(res);
+         }
+     })
+ };
+
+
+exports.deleteFile = function(req, res){
+    gfs.remove({_id:req.params.id, root: 'images'}, function (err, gridStore) {
+        if (err) {
+           return res.status(404).json({err: err});
         }
-        res.render('/upload', {
-            files: files,
-            user: req.user
+        res.redirect('/photo/phptogallery/', {
+
         });
     });
 };
-module.exports = imagesController;
+
+
+//display one image as JSON
+exports.getOneImage = function (req, res){
+    gfs.files.findOne({filename: req.params.filename},function(err, file){
+        if(!file || file.length === 0){
+            return res.status(404).json({
+                err: 'No file exist'
+            })
+        }
+        return res.json(file);
+    })
+};
+
+exports.displayFile = function (req, res){
+    gfs.files.find().toArray(function(err, files){
+        if(!files || files.length == 0){
+            return res.status(404).json({
+                err: 'No files exist'
+            })
+        }
+        return res.json(files);
+    })
+};
+
+//module.exports = imagesController;
