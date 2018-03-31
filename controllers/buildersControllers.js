@@ -7,7 +7,10 @@ var Review = require('../models/Review');
 var Customer = require('../models/Customer');
 var validation = require('./handlers/validation');
 var async = require('async');
+
 var builderController = {};
+
+
 
 //all list of builders
 builderController.list = function(req, res) {
@@ -67,7 +70,7 @@ builderController.findByName = function(req, res){
 //shows single
 builderController.show = function(req, res){
     Builder.findOne({_id: req.params.id}).populate('review').exec(function(err, builder){
-        var b =  builder.id;
+        var b = req.params.id;
         if(err){
             res.send(err);
         }
@@ -77,37 +80,36 @@ builderController.show = function(req, res){
                       res.send(err)
                   } else {
                       var data = [];
-                          async.filter(reviews.builder_id, function (review, callback) {
+                      //if (builder._id.equals(reviews.builder_id)){
 
-                              if (review.author_id) {
-                                  Customer.findById(review.author_id, function (err, customer) {
-                                      data.push({review: review, author_id: customer, builder_id: builder });
-
-                                      callback();
-                                  })
-                              } else {
+                      async.forEach(reviews, function (review, callback) {
+                          if (review.author_id) {
+                              Customer.findById(review.author_id, function (err, customer) {
+                                  data.push({review: review, author_id: customer, builder_id: builder});
                                   callback();
-                              }
-
-                          }, function (err) {
-                              if (err) res.send(err);
-                              var builderMessage = 'I am a qualified builder with experience';
-                              res.render('../views/builders/profile', {
-                                  builderMessage: builderMessage,
-                                  pageTitle: 'Builder\'s a home page',
-                                  user: req.user,
-                                  builder: builder,
-                                  author_id: customer,
-                                  reviews: reviews,
-                                  errors: global.errors,
-                                  messages: global.messages
-                                  //  owner: req.params.id === req.user.user.id ? true : false,
-                              });
-                              global.errors = '';
-                              global.messages = '';
+                              })
+                          } else {
+                              callback();
+                          }
+                      }, function (err) {
+                          if (err) res.send(err);
+                          var builderMessage = 'I am a qualified builder with experience';
+                          res.render('../views/builders/profile', {
+                              builderMessage: builderMessage,
+                              pageTitle: 'Builder\'s a home page',
+                              user: req.user,
+                              builder: builder,
+                              author_id: customer,
+                              reviews: reviews,
+                              errors: global.errors,
+                              messages: global.messages
+                              //  owner: req.params.id === req.user.user.id ? true : false,
                           });
-
+                          global.errors = '';
+                          global.messages = '';
+                      });
                   }
+                //  }
 
               });
         }
@@ -253,62 +255,6 @@ res.redirect('/photo/photogallery', {
  module.exports = builderController;
 
 
-
-
-/*builderController.show = function(req, res){
- Builder.findOne({_id: req.params.id}).exec(function(err, builder){
- if(err){
- // console.log(err);
- res.render('../views/index',{
- pageTitle: 'Home page',
- builder: builder,
- user: req.user,
- errors: global.errors,
- messages: global.messages
- });
- }
- else{
- console.log(builder);
- var array = [];
- async.forEach(array,function(review, callback){
- if(review.author_id){
- Builder.findById(review.builder_id,function(err, builder){
- //console.log(customer);
- array.push({
- reviews : review,
- builder: builder,
- rating: review.rating,
- description:review.description});
- callback();
- })
- }else{
- callback();
- }
- },function(err){
- if(err) res.send(err);
- // var dob = req.dob.toISOString();
- // dob = dob.substring(0, dob.indexOf('T'));
- console.log(err);
- //==============================
- var builderMessage = 'I am a qualified builder with experience';
- res.render('../views/builders/profile', {
- builderMessage: builderMessage,
- pageTitle: 'Builder\'s a home page',
- user: req.user,
- builder: builder,
- errors: global.errors,
- messages: global.messages,
- //  owner: req.params.id === req.user.user.id ? true : false,
- reviews: req.review
- });
- global.errors = '';
- global.messages = '';
- });
- }
- });
-
- };
-* */
 
 
 
