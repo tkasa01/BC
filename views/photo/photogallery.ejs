@@ -22,21 +22,33 @@
             </ul>
     </div>
     <hr>
-        <div>
+    <div>
+        <style>
+            img.display{
+                width: 20%;
+                height: 20%;
+            }
+        </style>
         <% if(files){ %>
             <% files.forEach(function(file) { %>
+
                  <% if (file.isImage) { %>
-                    <img class="display" src="images/<%=file.filename %>" alt=" ">
+
+                    <img class="display" src="image/<%=file.filename %>" alt="">
+
                 <%} else { %>
                     <%= file.filename %>
                 <% } %>
-                    <form method="post" action="/builders/profile/<%= builder._id%>/photo/images/<%= file._id %>?_method=delete">
-                        <button>Delete</button>
-                    </form>
-        </div>
+        <form method="post" action="/photo/photogallery/<%= file._id %>?_method=delete">
+            <button>Delete</button>
+        </form>
+
             <% }) %>
+
         <% } else { %>
             <p> No file to show </p>
         <% } %>
+
+    </div>
 </body>
 </html>
