@@ -6,14 +6,14 @@ var Schema = mongoose.Schema;
 
 
 var ReviewSchema = new Schema({
-        review: [{
-                rating: Number,
-                description: String,
-                created: {
+
+        rating: Number,
+        description: String,
+        created: {
                     type: Date,
                     default: Date.now
-                }
-    }],
+                },
+
 
     builder_id:{
         type: Schema.Types.ObjectId, //String,
@@ -25,6 +25,7 @@ var ReviewSchema = new Schema({
         ref:'Customer'
     }
 });
+
 
 ReviewSchema.pre('save', function (next) {
     author_id  = Review(this.author_id); //slygify in the video
