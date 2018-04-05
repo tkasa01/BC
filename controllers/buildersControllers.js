@@ -21,6 +21,7 @@ builderController.list = function(req, res) {
             res.render('../views/builders/list', {
                 pageTitle: 'List of Builders',
                 builders: builders,
+
                 user: req.user
             });
         }
@@ -36,35 +37,22 @@ builderController.displayPage = function(req, res){
 
 builderController.findByName = function(req, res){
 
-    Builder.find({$and:[{
-        firstname : req.body.firstname,
-        lastname :req.body.lastname,
-        position:req.body.position
-    }]},function(err,builders){
-        if(err || !builders){
-            global.errors =['• Not found'];
-            res.send('non found');
-        }else{
-            res.render('../views/builders/show',{
-                builder:builders,
-                user: req.user
-            });
-        }
-    });
-
-    /*
-     Builder.find({'firstname': req.body.firstname} || {'lastname':req.body.lastname }||{'position': req.body.position}).exec(function (err, builder ) {
+     Builder.find({$or:[{'firstname': req.body.firstname},{'lastname':req.body.lastname} ,{'position': req.body.position}]}).exec(function (err, builder ) {
         if(err || !builder){
-            global.errors =['Not found'];
-            res.send('non found');
+            res.status(404);
+            global.errors =['• Not found'];
+
         }else{
             res.render('../views/builders/show',{
                 builder:builder,
+                errors: global.errors,
                 user: req.user
             });
+            global.errors = '';
+            global.messages = '';
         }
     });
-    */
+
 };
 
 //shows single
@@ -100,8 +88,9 @@ builderController.show = function(req, res){
                             reviews: reviews,
                             errors: global.errors,
                             messages: global.messages
-                            //  owner: req.params.id === req.user.user.id ? true : false,
+                             //owner: req.params.id === req.user.user.id ? true : false,
                         });
+
                         global.errors = '';
                         global.messages = '';
                     });
@@ -276,17 +265,6 @@ res.redirect('/photo/photogallery', {
     //builder: builder,
     //_id: req.params.id,
 });
-        /*
-         res.render('./photo/photogallery',{
-             pageTitle: 'Collection of the builders work',
-             title: 'Categories: ',
-             categories: ['Bathrooms', 'Electricity', 'Paining', 'Carpenter'],
-             user: req.user,
-             files: req.files
-             //builder: builder,
-             //_id: req.params.id,
-        });
-*/
 
 };
 
