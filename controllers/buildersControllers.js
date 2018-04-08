@@ -36,23 +36,21 @@ builderController.displayPage = function(req, res){
 };
 
 builderController.findByName = function(req, res){
-
-     Builder.find({$or:[{'firstname': req.body.firstname},{'lastname':req.body.lastname} ,{'position': req.body.position}]}).exec(function (err, builder ) {
+    Builder.find({$or:[{'firstname': req.body.firstname},{'lastname':req.body.lastname} ,{'position': req.body.position}]}).exec(function (err, builder ) {
         if(err || !builder){
-            res.status(404);
-            global.errors =['• Not found'];
+             res.status(404);
+             global.errors =['• Not found'];
 
         }else{
-            res.render('../views/builders/show',{
-                builder:builder,
-                errors: global.errors,
-                user: req.user
-            });
-            global.errors = '';
-            global.messages = '';
+             res.render('../views/builders/show',{
+                    builder:builder,
+                    errors: global.errors,
+                    user: req.user
+             });
+                global.errors = '';
+                global.messages = '';
         }
     });
-
 };
 
 //shows single
@@ -70,7 +68,7 @@ builderController.show = function(req, res){
                     async.forEach(reviews, function (review, callback) {
                         if (review.author_id) {
                             Customer.findById(review.author_id, function (err, customer) {
-                                data.push({review: review, author_id: customer, builder_id: builder});
+                                data.push({review: review, author_id: customer, builder: builder});
                                 callback();
                             })
                         } else {
@@ -78,72 +76,26 @@ builderController.show = function(req, res){
                         }
                     }, function (err) {
                         if (err) res.send(err);
-                        var builderMessage = 'I am a qualified builder with experience';
-                        res.render('../views/builders/profile', {
-                            builderMessage: builderMessage,
-                            pageTitle: 'Builder\'s a home page',
-                            user: req.user,
-                            builder: builder,
-                            author_id: customer,
-                            reviews: reviews,
-                            errors: global.errors,
-                            messages: global.messages
-                             //owner: req.params.id === req.user.user.id ? true : false,
+                            var builderMessage = 'I am a qualified builder with experience';
+                            res.render('../views/builders/profile', {
+                                builderMessage: builderMessage,
+                                pageTitle: 'Builder\'s a home page',
+                                user: req.user,
+                                builder: builder,
+                                author_id: req.params.id,
+                                reviews: data,
+                                errors: global.errors,
+                                messages: global.messages
+                                //owner: req.params.id === req.user.user.id ? true : false,
+                            });
+                            global.errors = '';
+                            global.messages = '';
                         });
-
-                        global.errors = '';
-                        global.messages = '';
-                    });
                 }
-
-
             });
         }
     });
 };
-/*
-builderController.myReviews = function(req, res){
-   // Builder.findOne({_id: req.params.id}).populate('review').exec(function(err, builder) {
-        //console.log(builder);
-        Review.findById(id).populate('builder_id').exec(function (err, reviews, builder) {
-            console.log(id);
-            if (err) {
-                res.send(err);
-            } else {
-
-                var builderReview = [];
-                builder.forEach(function (review, callback) {
-                    if (review.builder_id) {
-                        builderReview.push({review: review, author_id: customer, builder_id: builder});
-                        callback();
-                    } else {
-                        callback();
-                    }
-                    console.log(review.builder_id);
-                }, function (err) {
-                    if (err) res.send(err);
-                    var builderMessage = 'I am a qualified builder with experience';
-                    res.render('../views/builders/profile', {
-                        builderMessage: builderMessage,
-                        pageTitle: 'Builder\'s a home page',
-                        user: req.user,
-                        builder: builder,
-                        author_id: customer,
-                        reviews: reviews,
-                        errors: global.errors,
-                        messages: global.messages
-                        //  owner: req.params.id === req.user.user.id ? true : false,
-                    });
-                    global.errors = '';
-                    global.messages = '';
-                });
-            }
-
-
-        });
-    //})
-};
-*/
 
 builderController.showRegistrationPage = function(req,res){
     res.render('builders/registration', {
@@ -218,7 +170,7 @@ builderController.update = function(req, res){
                res.render("../views/builders/edit", {builder: req.body,  user: req.user});
            }
 
-               res.redirect('/builders/show/'+ builder._id, { user: req.user});
+               res.redirect("../views/builders/profile/" + builder._id, { user: req.user});
       });
  };
 
@@ -265,6 +217,17 @@ res.redirect('/photo/photogallery', {
     //builder: builder,
     //_id: req.params.id,
 });
+        /*
+         res.render('./photo/photogallery',{
+             pageTitle: 'Collection of the builders work',
+             title: 'Categories: ',
+             categories: ['Bathrooms', 'Electricity', 'Paining', 'Carpenter'],
+             user: req.user,
+             files: req.files
+             //builder: builder,
+             //_id: req.params.id,
+        });
+*/
 
 };
 
