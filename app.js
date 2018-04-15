@@ -3,15 +3,19 @@ var app = express();
 var path = require('path');
 var favicon = require('serve-favicon');
 var session = require('express-session');
+
 var shortid = require('shortid');
 var mongoose = require('mongoose');
-
 var methodOverride = require('method-override');
-
-
-
+var fs = require('fs');
 var validator = require('validator');
 var _ = require('lodash');
+
+/*it is a middleware function that gives the value of that id, it is a forth argument */
+app.param('id', function(req, res, next, id){
+    console.log("this is my id" + id);
+    next();
+});
 
 //var flash = require('connect-flash');
 require('./middlewareApp')(app);
@@ -25,6 +29,10 @@ var db = mongoose.connect('mongodb://localhost/BC',{
   useMongoClient: true
 });
 
+fs.readdirSync(__dirname + '/models').forEach(function(filename){
+    if(~filename.indexOf('sf'))require(__dirname + '/models' + filename)
+});
+/*
 require('./models/Builder');
 var Builder = mongoose.model('Builder');
 
@@ -42,17 +50,12 @@ var GFS = mongoose.model('GFS');
 
 require('./models/Category');
 var Category = mongoose.model('Category');
-
-console.log('listen on port 3000' + db);
+*/
 
 //app.locals.info = 'flash';
 app.locals.siteTitle = 'Building Company';
 
-/*it is a middleware function that gives the value of that id, it is a forth argument */
-app.param('id', function(req, res, next, id){
-        console.log("this is my id" + id);
-        next();
-});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -67,10 +70,9 @@ app.use(session({
     secret: 'foolala',
     saveUninitialized: true,
     resave: true,
-    //store: new  MongoStore({
-        mongooseConnection: mongoose.connection,
-        autoRemove: 'native',
-   // }),
+    mongooseConnection: mongoose.connection,
+    autoRemove: 'native',
+
     cookie: {maxAge: 180*60*1000} //2 hours
 }));
 
